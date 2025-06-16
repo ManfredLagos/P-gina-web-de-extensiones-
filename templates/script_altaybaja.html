@@ -1,0 +1,403 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="seccion_script">
+    <form id="altaForm" action="/descargar_script" method="POST" enctype="multipart/form-data" target="hidden_iframe" onsubmit="handleSubmit(event)">
+        <div class="titulo_script">
+            <h1 class="bienvenido">Script</h1>
+        </div>
+        <div class="sec_script">
+            <div class="contenedor_script">
+                <input id="nombre_documento" class="input correo" type="text" name="nombre_documento" placeholder="Nombre del documento">
+                <h3>Alta</h3>
+                <div id="extension_aa"></div>
+                <h3>Baja</h3>
+                <div id="extension_bb"></div>
+                <div style="margin: 15px 0; padding: 0 0 0 5px">
+                    <h3 style="margin: 0 0 15px 0;">Carga masiva</h3>
+                    <div style="margin: 5px 0;">
+                        <label for="machote" style="color: #293c77; font-weight: 700;">Machote</label>
+                        <button id="machote_altaybaja" class="descargar">Descargar</button>
+                    </div>
+                    <div style="margin: 5px 0; color: #293c77; font-weight: 700;">
+                        <label for="archivo" >Archivo</label>
+                        <input id="archivo" type="file" name="archivo" style="font-weight: 500;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="titulo_politicas">
+            <h1 class="bienvenido">Políticas</h1>
+        </div>
+        <div class="sec_politicas">
+            <div>
+                <label style="font-weight: 700;">
+                    <input type="radio" name="politica" value="generales" checked>Políticas Generales
+                    <div id="generales" style="display:block;">
+                        <hr style="margin: 15px 0 0 0;">
+                        <div style="margin: 0 30px 0 60px;">
+                            <h6 style="margin: 20 0 0 0;">Alta<br><br>
+                                echo "Set-CsPhoneNumberAssignment -Identity  -EnterpriseVoiceEnabled $true"<br>
+                                Set-CsPhoneNumberAssignment -Identity  -EnterpriseVoiceEnabled $true
+                                <br><br>
+                                echo "Set-CsPhoneNumberAssignment -Identity  -PhoneNumber +8423 -PhoneNumberType DirectRouting"<br>
+                                Set-CsPhoneNumberAssignment -Identity  -PhoneNumber +8423 -PhoneNumberType DirectRouting
+                                <br><br>
+                                echo "Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName ISMYCONNECT"<br>
+                                Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName "ISMYCONNECT"
+                                <br><br>
+                                echo "Grant-CsTeamsCallingPolicy -Identity  -PolicyName AllowCalling"<br>
+                                Grant-CsTeamsCallingPolicy -Identity  -PolicyName AllowCalling
+                                <br><br>
+                                echo "Grant-CsTenantDialPlan -Identity  -PolicyName ISMYCONNECT"<br>
+                                Grant-CsTenantDialPlan -Identity  -PolicyName ISMYCONNECT
+                            </h6>
+                            <h6 style="margin: 0 0 20px 0;">Baja<br><br>
+                                echo "Remove-CsPhoneNumberAssignment -Identity  -PhoneNumberType -RemoveAll"<br>
+                                Remove-CsPhoneNumberAssignment -Identity  -RemoveAll
+                                <br><br>
+                                echo "Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName $null"<br>
+                                Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName $null
+                                <br><br>
+                                echo "Grant-CsTeamsCallingPolicy -Identity  -PolicyName $null"<br>
+                                Grant-CsTeamsCallingPolicy -Identity  -PolicyName $null
+                            </h6>
+                        </div>
+                        <hr>
+                    </div>
+                </label>
+            </div>
+            <div>
+                <label style="font-weight: 700;">
+                    <input type="radio" name="politica" value="individuales">Políticas Individuales
+                </label><br>
+                <div id="individuales" style="display:none;">
+                    <hr style="margin: 15px 0 0 0;">
+                    <div style="margin: 0 30px 0 30px; padding: 15px 0">
+                        <div>
+                            <p style="font-weight: 700;">Alta</p>
+                        </div>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set1">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Set-CsPhoneNumberAssignment -Identity  -EnterpriseVoiceEnabled $true" <br>
+                                    Set-CsPhoneNumberAssignment -Identity  -EnterpriseVoiceEnabled $true
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set2">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Set-CsPhoneNumberAssignment -Identity  -PhoneNumber +8423 -PhoneNumberType DirectRouting" <br>
+                                    Set-CsPhoneNumberAssignment -Identity  -PhoneNumber +8423 -PhoneNumberType DirectRouting
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input id="checkbox-set3" class="checkbox" type="checkbox" name="politicas_individuales[]" value="set3" onclick="toggleNumero()">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Set-CsPhoneNumberAssignment -Identity  -PhoneNumber +50640004000;ext=01 -PhoneNumberType DirectRouting" <br>
+                                    Set-CsPhoneNumberAssignment -Identity  -PhoneNumber "+50640004000;ext=01" -PhoneNumberType DirectRouting
+                                </p>
+                            </div>
+                        </label><br>
+                        <div id="numero-set3" style="display: none; font-weight: 700;">
+                            <div style="padding: 0 0 0 50px;">
+                                <label for="numero_general" >Número General</label>
+                                <input id="numero_general" type="radio" name="dato" value="True" checked>
+
+                                <label for="numero_individual">Número Individual</label>
+                                <input type="radio" name="dato" value="False">    
+                            </div>
+                            <br>
+                            <div style="padding: 0 0 0 45px;" id="div_numero_general">
+                                <input type="text" class="input correo" placeholder="Código de país + Número" name="numero">
+                                <div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set4">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName ISMYCONNECT" <br>
+                                    Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName "ISMYCONNECT"
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set5">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsTeamsCallingPolicy -Identity  -PolicyName AllowCalling" <br>
+                                    Grant-CsTeamsCallingPolicy -Identity  -PolicyName AllowCalling
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set12">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsTeamsCallingPolicy -Identity -PolicyName CMW-All-Enabled" <br>
+                                    Grant-CsTeamsCallingPolicy -Identity  -PolicyName CMW-All-Enabled
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set13">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsTeamsCallingPolicy -Identity -PolicyName CMW-VM-Disabled" <br>
+                                    Grant-CsTeamsCallingPolicy -Identity  -PolicyName CMW-VM-Disabled
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set6">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsTenantDialPlan -Identity -PolicyName ISMYCONNECT" <br>
+                                    Grant-CsTenantDialPlan -Identity -PolicyName ISMYCONNECT
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set7">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsOnlineAudioConferencingRoutingPolicy  -Identity -PolicyName ISMYCONNECT" <br>
+                                    Grant-CsOnlineAudioConferencingRoutingPolicy  -Identity -PolicyName ISMYCONNECT
+                                </p>
+                            </div>
+                        </label>
+                        <div>
+                            <p style="font-weight: 700;">Baja</p>
+                        </div>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set8" checked>
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Remove-CsPhoneNumberAssignment -Identity  -PhoneNumberType -RemoveAll" <br>
+                                    Remove-CsPhoneNumberAssignment -Identity  -RemoveAll
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set9" checked>
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName $null" <br>
+                                    Grant-CsOnlineVoiceRoutingPolicy -Identity  -PolicyName $null
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set10" checked>
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsTeamsCallingPolicy -Identity  -PolicyName $null" <br>
+                                    Grant-CsTeamsCallingPolicy -Identity  -PolicyName $null
+                                </p>
+                            </div>
+                        </label><br>
+                        <label class="class_box">
+                            <div>
+                                <input class="checkbox" type="checkbox" name="politicas_individuales[]" value="set11">
+                            </div>
+                            <div>
+                                <p>
+                                    echo "Grant-CsOnlineAudioConferencingRoutingPolicy  -Identity  -PolicyName $null" <br>
+                                    Grant-CsOnlineAudioConferencingRoutingPolicy -Identity  -PolicyName $null
+                                </p>
+                            </div>
+                        </label>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+            <div>
+                <label style="font-weight: 700; margin: 5px 0;">
+                    <input type="radio" name="politica" value="dominio">Políticas Por Dominio
+                    <br>
+                    <div id="dominio" style="display:none;">
+                        <hr style="width: 96%; margin: 15px 0 0 10px;">
+                        <br>
+                        <div id="buscar">
+                            <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                                <div><input id="correo_dominio" class="input correo" placeholder="Correo" name="correo_dominio" style="margin: 0 0 10px 0;"></div>
+                                <div><button class="button buscar" type="button" onclick="politicas_por_dominio_altaybaja()">Buscar</button></div>
+                            </div>
+                        </div>
+                        <div id = "seccion_alta" style="display: none;">
+                            <div style="margin: 0 0 0 55px; padding: 0;">Alta<br><br></div>
+                            <div id="politicas_alta" style="padding: 0 55px 0 55px;">
+                                <!-- Aquí se mostrarán las políticas obtenidas -->
+                            </div>
+                        </div>
+                        <div id = "seccion_baja" style="display: none;">
+                            <div style="margin: 25px 0 0 55px; padding: 0;">Baja<br><br></div>
+                            <div id="politicas_baja" style="padding: 0 55px 0 55px;">
+                                <!-- Aquí se mostrarán las políticas obtenidas -->
+                            </div>
+                        </div>
+
+                        <br>
+                        <hr style="width: 96%; margin: 0 0 0 10px;">
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="generar">
+            <button class="button" type="submit">Generar</button>
+        </div>
+    </form>
+</div>
+<!-- Iframe oculto para la descarga del archivo -->
+<iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
+
+<!-- GIF de carga -->
+<div id="loading" class="cargar">
+    <img src="{{ url_for('static', filename='imagenes/loading2.gif') }}" alt="Cargando..." style="width:100%; height:100%;">
+</div>
+
+
+<!-- Div mensaje de error -->
+<div id="mensaje" style="display: none; margin: 0; padding: 0;">
+    <div id = "mensaje_error">
+        <img id="error" class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
+        <div class="mensaje">
+            <p style="padding: 0; margin: 0;">¡Por favor, ingrese todos los datos antes de continuar!</p>
+        </div>
+        <button class="volver" onclick="mensaje()">Volver</button>
+    </div>
+</div>
+
+<!-- Div de sombra -->
+<div id="shadow" class="sombra"></div>
+
+<script>
+
+window.onload = function() {
+const aa = parseInt(localStorage.getItem('aa')) || 0;;
+const bb = parseInt(localStorage.getItem('bb')) || 0;;
+    
+    // Lógica para duplicar el div según la cantidad ingresada
+    if (bb > 0) {
+        agregarDivs_baja(bb);
+    }
+    if (aa > 0) {
+        agregarDivs_alta(aa);
+    }
+};
+    
+function agregarDivs_alta(aa) {
+    const contenedor = document.getElementById('extension_aa');
+    for (let i = 0; i < aa; i++) {
+        const div = document.createElement('div');
+        div.classList.add('extension_aa');
+        div.innerHTML = `
+            <input class="input correo" type="text" placeholder="Correo ${i + 1}" name="correo_alta ${i + 1}">
+            <input class="input extension" type="text" placeholder="Extensión ${i + 1}" name="extension_alta ${i + 1}">
+            <input type="text" class="input numero" placeholder="Código de país + Número ${i + 1}" name="numero_alta${i + 1}">
+        `;
+        contenedor.appendChild(div);
+        }
+}
+    
+function agregarDivs_baja(bb) {
+    const contenedor = document.getElementById('extension_bb');
+    for (let i = 0; i < bb; i++) {
+        const div = document.createElement('div');
+        div.classList.add('extension_bb');
+        div.innerHTML = `
+            <input class="input correo" type="text" placeholder="Correo ${i + 1}" name="correo_baja ${i + 1}">
+        `;
+        contenedor.appendChild(div);
+        }
+}
+
+function politicas_por_dominio_altaybaja() {
+    const correo = document.getElementById('correo_dominio').value;
+    const tipo_extension1 = 'alta'; // tipo de politica
+    const tipo_extension2 = 'baja'; // tipo de politica
+    var buscar = document.getElementById("buscar");
+    var seccion_alta = document.getElementById("seccion_alta");
+    var seccion_baja = document.getElementById("seccion_baja");
+
+    // Enviar los datos con fetch a la ruta /obtener_politicas alta
+    fetch('/script_alta_busqueda', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ correo: correo, tipo_extension: tipo_extension1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Mostrar las políticas recibidas
+        document.getElementById('politicas_alta').innerHTML = data.politicas;
+    })
+    .catch(error => console.error('Error:', error));
+
+        // Enviar los datos con fetch a la ruta /obtener_politicas baja
+        fetch('/script_alta_busqueda', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ correo: correo, tipo_extension: tipo_extension2 })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Mostrar las políticas recibidas
+        document.getElementById('politicas_baja').innerHTML = data.politicas;
+    })
+    .catch(error => console.error('Error:', error));
+
+    // ocultar la seccion de buscar
+    buscar.style.display = "none";
+    seccion_alta.style.display = "block";
+    seccion_baja.style.display = "block";
+}
+
+document.getElementById('machote_altaybaja').addEventListener('click', function(event) {
+    event.preventDefault();  // Evitar que se envíe el formulario al hacer clic
+
+    const url = '/static/archivos/extensiones_teams.xlsx';  // Reemplaza con la URL real del archivo en tu servidor
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'extensiones_teams.xlsx';  // Nombre con el que se descargará el archivo
+    link.click();  // Ejecuta el clic del enlace para iniciar la descarga
+});
+    
+</script>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+/* Contenedor del carrusel */
+.carrusel-container {
+    position: relative;
+    width: 800px;  /* Limitar el contenedor del carrusel al tamaño de las imágenes */
+    height: 400px;
+    margin: 20px;
+    overflow: hidden; /* Ocultar imágenes que no estén visibles */
+    border-radius: 20px; /* Bordes redondeados */
+    justify-content: center;  /* Centra las imágenes horizontalmente */
+}
+
+/* El contenedor interno de las imágenes */
+.carrusel {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Suaviza el movimiento */
+}
+
+/* Cada imagen dentro del carrusel */
+.imgfondo {
+    width: 100%;  /* Las imágenes ocupan el 100% del contenedor */
+    height: 100%; /* Alto fijo */
+    object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+    object-position: center;
+    border-radius: 20px; /* Bordes redondeados */
+    display: block; /* Elimina cualquier espacio extra debajo de la imagen */
+}
+
+/* Estilos para los botones de navegación */
+.button_carrusel {
+    position: absolute;
+    top: 50%;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 30px;
+    z-index: 1000;
+    transform: translateY(-50%);
+    border-radius: 40%;
+}
+
+.button_carrusel:hover{
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.button_carrusel.prev {
+    left: 0;
+}
+
+.button_carrusel.next {
+    right: 0;
+}
+
+/* Estilos para cuando el carrusel está en pantalla completa */
+@media screen and (max-width: 600px) {
+    .imgfondo {
+        width: 100%;  /* Ajustamos el tamaño de las imágenes para pantallas pequeñas */
+    }
+}

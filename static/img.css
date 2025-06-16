@@ -1,0 +1,95 @@
+.imgcallmyway {
+    height: 64.5px;
+    width: 292px;
+    left: 0;
+    margin: 1.4px 10px 1px 40px;
+}
+
+.imgteams {
+    height: 55px;
+    width: 180px;
+    right: 0;
+    margin: 4px 40px 1px 5px;
+    
+}
+
+.imgcopiar {
+    width: 30px; /* Ancho fijo para los botones */
+    height: 30px;
+    opacity: 0.5;
+    top: 0;
+    right: 0;
+    position: absolute;
+    margin: 5px 5px 0 0;
+    cursor: pointer;
+}
+
+.imgcheck {
+    width: 20px; /* Ancho fijo para los botones */
+    height: 20px;
+    opacity: 0.5;
+    top: 0;
+    right: 0;
+    position: absolute;
+    margin: 10px 10px 0 0;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.imglupa {
+    width: 15px; /* Ancho fijo para los botones */
+    height: 15px;
+    opacity: 0.5;
+    top: 0;
+    right: 0;
+    position: absolute;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.cargar {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Cambiado a fixed para que esté siempre en la pantalla */
+    width: 190px; /* Ancho del contenedor */
+    height: 140px; /* Alto del contenedor */
+    top: 45%; /* Centrado verticalmente */
+    left: 50%; /* Centrado horizontalmente */
+    transform: translate(-50%, -50%); /* Para centrar exactamente */
+    z-index: 9999; /* Asegúrate de que esté por encima de otros elementos */
+    text-align: center; /* Centrar texto en el contenedor */
+    border-radius: 10px; /* Bordes redondeados (opcional) */
+}
+
+.sombra {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Mantenerlo fijo en la pantalla */
+    top: 0; /* Posicionar en la parte superior */
+    left: 0; /* Posicionar en la parte izquierda */
+    width: 100%; /* Ancho total de la pantalla */
+    height: 100%; /* Alto total de la pantalla */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+    z-index: 9998; /* Detrás del GIF, pero por encima del resto del contenido */
+    margin: 0;
+    padding: 0;
+}
+
+
+.img_error{
+    height: 45px;
+    width: 45px;
+    margin: 0 90% 7px 0;
+    
+}
+
+.imgfondo{
+    width: 800px;
+    height: 400px;
+}
+
+.imgplay{
+    width: 12px;
+    height: 12px;
+}
+
+
+

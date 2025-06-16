@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallMyWay</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Image/Logo.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">       
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/program.js') }}"></script>
+</head>
+
+<body>
+    {% include 'navbarAdmin.html' %}
+    <header>
+        <h1>Administración de Cuentas</h1>
+    </header>
+    <main>
+        <section class="account-form">
+            <div class="tab d-flex justify-content-between align-items-center">
+                <div>
+                    <button class="tablinks btn" onclick="openTab(event, 'Agregar')">Agregar Cuenta</button>
+                    <button class="tablinks btn" onclick="openTab(event, 'Modificar')">Modificar Cuenta</button>
+                    <button class="tablinks btn" onclick="openTab(event, 'AgregarPoliticasCuenta')">Agregar Politicas/Cuentas</button>
+                </div>
+                <div>
+                    <button id="removePolicy" type="button" style="width: min-content; height: min-content; color: red;" onclick="removePolicy()"><i class="fa-solid fa-circle-minus"></i></button>
+                    <button id="addPolicy" type="button" style="width: min-content; height: min-content; color:#28A745;" onclick="addPolicy()"><i class="fa-solid fa-circle-plus"></i></button>
+                </div>
+            </div>
+            <div id="Agregar" class="tabcontent">
+                <form id="AgregarForm" method="POST" action="/add-account" class="p-4 rounded bg-light">
+                    <h3 class="mb-3">Agregar Cuenta</h3>
+                    <div class="mb-3">
+                        <label class="form-label">ID de la Cuenta:</label>
+                        <input type="text" class="form-control" id="idAccountAdd" name="idAccountAdd"
+                            placeholder="ID de la Cuenta" required >
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cuenta:</label>
+                        <input type="text" class="form-control" id="nameAccountAdd" name="nameAccountAdd"
+                            placeholder="Cuenta" required>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="background-color: green; border-color: green;">Agregar Política</button>
+                </form>
+            </div>
+            <div id="Modificar" class="tabcontent">
+                <form id="UpdateForm" method="POST" action="/update-accounts" class="p-4 rounded bg-light">
+                    <h3 class="mb-3">Actualizar Cuentas</h3>
+                    <div class="mb-3">
+                        <select class="form-select" id="accountSelect" name="accountSelect" onchange="updateAccount()">
+                            <option value="" disabled selected>Seleccionar cuenta</option>
+                            {% for id_cuenta, cuenta_id, nombre_cuenta in accounts %}
+                            <option value="{{ id_cuenta }}" data-description="{{ accounts }}">{{ nombre_cuenta }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text"  class="form-control" id="newAccountID" name="newAccountID" placeholder="Nuevo ID de la cuenta" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="newAccountName" name="newAccountName" placeholder="Nuevo nombre de la cuenta" required>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="background-color: green; border-color: green;">Actualizar Cuenta</button>
+                </form>
+            </div>
+            <div id="AgregarPoliticasCuenta" class="tabcontent">
+                <form id="AgregarPoliticasCuentaForm" method="POST" action="/add-policy-account" class="p-4 rounded bg-light">
+                    <h3 class="mb-3">Agregar Politicas</h3>
+                    <div class="mb-3">
+                        <label class="form-label">Cuenta:</label>
+                        <select class="form-select" id="IDAccountSelect" name="IDAccountSelect" onchange="">
+                            <option value="" disabled selected>Seleccionar cuenta</option>
+                            {% for id_cuenta, cuenta_id, nombre_cuenta in accounts %}
+                            <option value="{{ id_cuenta }}" data-description="{{ accounts }}">{{ nombre_cuenta }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Politica:</label>
+                        <div id="selectContainer" class="d-flex flex-column">
+                            <select class="form-select" id="AccountSelect[]" name="AccountSelect[]" style="margin-top: 15px;">
+                                <option value="" disabled selected>Seleccionar política</option>
+                                {% for id, nombre, descripcion, prioridad, active in descriptions %}
+                                <option value="{{ id }}" data-description="{{ descripcion }}">{{ nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary" style="background-color: green; border-color: green;">Agregar Política</button>
+                </form>
+            </div>
+        </section>        
+        <section class="account-list">
+            <br>
+            <h2>Lista de Cuentas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="display: none;">ID</th>
+                        <th>ID Cuenta</th>
+                        <th>Cuenta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                    {% for account in accounts %}
+                    <tr>
+                        <td style="display: none;">{{ account[0] }}</td>
+                        <td>{{ account[1] }}</td>
+                        <td>{{ account[2] }}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" onclick="openModalDeleteAccount( '{{ account[0] }}')">Eliminar</button>
+                            <a type="button" class="btn btn-primary" href="{{ url_for('cuentas_detalles', id=account[0]) }}">Detalles</a>
+                            <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteAccountModalLabel">Confirmar</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que quieres eliminar esta cuenta?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-danger" id="confirmDelete">Eliminar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4">No hay cuentas disponibles.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+    <footer>
+        <p>© 2024 VoIP Teams. Todos los derechos reservados bajo la propiedad de de CallMyWay N.Y. S.A.</p>
+    </footer>
+    <script>
+            function updateDescriptionAccount() {
+            const select = document.getElementById('accountSelect');
+            const selectedOption = select.options[select.selectedIndex];
+        }
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            if (document.getElementById(tabName).id == 'Agregar') {
+                document.getElementById('removePolicy').style.display = "none";
+                document.getElementById('addPolicy').style.display = "none";
+            } else if (document.getElementById(tabName).id == 'Modificar') {
+                document.getElementById('removePolicy').style.display = "none";
+                document.getElementById('addPolicy').style.display = "none";
+            }else if (document.getElementById(tabName).id == 'AgregarPoliticasCuenta') {
+                document.getElementById('removePolicy').style.display = "block";
+                document.getElementById('addPolicy').style.display = "block";
+            }
+        }
+
+        window.addEventListener('load', (event) => {
+            document.getElementsByClassName("tablinks")[0].click();
+        });
+
+        function addPolicy() {
+            var selectContainer = document.getElementById('selectContainer');
+            var newSelect = selectContainer.firstElementChild.cloneNode(true);
+            newSelect.value = '';
+            selectContainer.appendChild(newSelect);        
+        
+        }
+        function removePolicy() {
+        var selectContainer = document.getElementById('selectContainer');
+        var selectElements = selectContainer.querySelectorAll('select');
+            if (selectElements.length > 1) {
+                var lastSelect = selectElements[selectElements.length - 1];
+                selectContainer.removeChild(lastSelect);
+            }
+        }
+        
+</script>
+</body>
+
+</html>

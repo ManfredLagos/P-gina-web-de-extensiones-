@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="contenedorcuerpo">
+    <div class="seccion_inicio">
+            <div class="titulo">
+                <div class="bienvenido">
+                    <h1>Bienvenido a ScriptMaster</h1>
+                </div>
+            </div>
+            <div class="button_alta">
+                <button class="button" onclick="mostrarinput('alta')">Alta</button>
+                <div id="alta" style="visibility:hidden;">
+                    <input name="alta" class="input" type="text" placeholder="Cantidad Alta">
+                </div>
+            </div>
+            <div class="button_baja">
+                <button class="button" onclick="mostrarinput('baja')">Baja</button>
+                <div id="baja" style="visibility:hidden;">
+                    <input name="baja" class="input" type="text" placeholder="Cantidad Baja">
+                </div>
+            </div>
+            <div class="button_altaybaja">
+                <button class="button" onclick="mostrarinput('altaybaja')">Alta y Baja</button>
+                <div id="altaybaja" style="visibility:hidden;">
+                    <input name="aa" class="input" type="text" placeholder="Cantidad Alta">
+                    <input name="bb" class="input" type="text" placeholder="Cantidad Baja">
+                </div>
+            </div>
+            <div class="continuar">
+                <a id="continuar" href="#" style="display: flex; text-decoration: none;"><button class="button" onclick="continuar()">Continuar</button></a>
+            </div>
+    </div>
+</div>
+
+<script>
+
+function continuar() {
+
+// Obtener la cantidad de los inputs
+const alta = document.querySelector('input[name="alta"]').value;
+const baja = document.querySelector('input[name="baja"]').value;
+const aa = document.querySelector('input[name="aa"]').value;
+const bb = document.querySelector('input[name="bb"]').value;
+
+// Almacenar en localStorage según lo ingresado
+if (alta) localStorage.setItem('alta', alta);
+if (baja) localStorage.setItem('baja', baja);
+if (aa) localStorage.setItem('aa', aa);
+if (bb) localStorage.setItem('bb', bb);
+
+console.log(aa,bb,alta,baja);
+
+// Cambiar la ruta del enlace de "Continuar" dependiendo de la selección
+var continuarButton = document.getElementById('continuar');
+
+if (alta > 0 || baja > 0){
+    if (alta > 0) {
+        continuarButton.href = '/script_alta';
+    } else if (baja > 0) {
+        continuarButton.href = '/script_baja';
+    }
+}
+else if (aa > 0 && bb > 0){
+        continuarButton.href = '/script_altaybaja';
+    }
+
+else{
+    document.getElementById('mensaje').style.display = 'block';
+    document.getElementById('shadow').style.display = 'block';
+}
+}
+</script>
+
+{% endblock %}
+
+

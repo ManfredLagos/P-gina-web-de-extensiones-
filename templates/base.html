@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Scripts</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+    <link id="logo" rel="icon" href="{{ url_for('static', filename='imagenes/titulo.ico') }}" type="image/ico">
+    <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
+</head>
+<body class="contenedor">
+    <header class="cabeza">
+        <div>
+            <img class="imgcallmyway" src="{{ url_for('static', filename='imagenes/Captura_de_pantalla_2024-08-24_110935-removebg-preview.png') }}" alt="CallMyWay Logo">
+        </div>
+        <div>
+            <img class="imgteams" src="{{ url_for('static', filename='imagenes/image-removebg-preview.png') }}" alt="Teams Logo">
+        </div>
+    </header>
+    <nav class="linea1"></nav>
+    <nav class="linea2">   
+        <div>
+            <a href="/"><button class="inicio" aria-label="Inicio">Inicio</button></a>
+            <a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>
+            <a href="/respuestas"><button class="respuestas" aria-label="Respuestas">Respuestas</button></a>
+        </div>
+    </nav>
+    <main class="cuerpo">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="pie1">
+        <div id="mensaje" style="display: none; margin: 0; padding: 0;">
+            <div id = "mensaje_error">
+                <img id="error" class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
+                <div class="mensaje">
+                    <p style="padding: 0; margin: 0;">¡Por favor, seleccione una opción válida e ingrese un valor superior a 0 para continuar!</p>
+                </div>
+                <a href="/"><button class="volver">Volver</button></a>
+            </div>
+        </div>
+        <div id="shadow" class="sombra"></div>
+    </footer>
+    <footer class="pie2">
+        CallMyWay y sus logos son marcas registradas bajo la propiedad de CallMyWay N.Y. S. A. Licenciados por la Sutel bajo el título SUTEL-TH-003. Todos los derechos reservados.
+    </footer>
+    <div class="pie3" style="display: none;"></div>
+</body>
+</html>

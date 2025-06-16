@@ -1,0 +1,204 @@
+/* Reset básico para margen y padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+header {
+    background: #007BFF;
+    color: #fff;
+    padding: 5px 5px;
+    text-align: center;
+}
+
+main {
+    margin-top: 20px;
+}
+
+.navbar {
+    background-color: #f8f9fa; /* Fondo claro para la barra de navegación */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para profundidad */
+}
+
+.navbar-brand img {
+    max-height: 60px; /* Altura máxima del logo */
+    padding-bottom: 5px; /* Espacio debajo del logo */
+}
+
+.nav-link {
+    color: black; /* Color del texto para los enlaces */
+}
+
+.navbar-collapse {
+    padding-bottom: 10px; /* Espacio debajo del contenido colapsado */
+}
+
+.policy-form {
+    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.form-group textarea {
+    height: 100px;
+}
+
+button {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #218838;
+}
+
+.policy-list table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.policy-list h2 {
+    display: flex;
+    justify-content: center;
+}
+
+.policy-list th,
+.policy-list td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.account-list table{
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+
+.account-list h2{
+    display: flex;
+    justify-content: center;
+}
+
+
+.account-list th,
+.account-list td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Estilo de los botones dentro del contenedor de pestañas */
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Cambia el color de fondo del botón al pasar el mouse */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Crea un estilo activo/tab específico */
+.tab button.active {
+    background-color: #ccc;
+}
+
+/* Estilo del contenido de la pestaña (oculto por defecto) */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+/* Media Querys */
+
+/* Pantallas grandes*/
+@media (min-width: 1200px) {
+    .navbar {
+        padding: 0 20px; 
+    }
+}
+
+/* Pantallas medianas */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .navbar {
+        padding: 0 15px;
+    }
+
+    .navbar-collapse {
+        padding-bottom: 5px;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 767px) {
+    .navbar {
+        padding: 0 10px;
+    }
+
+    .navbar-brand img {
+        max-height: 40px; 
+    }
+
+    .navbar-collapse {
+        padding-bottom: 5px;
+    }
+}

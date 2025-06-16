@@ -1,0 +1,172 @@
+.contenedor_global {
+    height: 100%;
+    width: 100%;
+    padding: 10px 35px;
+    box-sizing: border-box;
+}
+
+.contenedor_respuesta {
+    background: #ffffff;
+    box-sizing: border-box;
+    margin: 10px 0;
+}
+
+.titulo_respuesta {
+    width: 100%;
+    height: 30px;
+    background: #337ab7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.titulo_respuesta:hover {
+    background: #4483b9;
+}
+
+.titulo_respuesta_p {
+    color: #ffffff;
+    text-align: center;
+    font-weight: 600;
+}
+
+.texto_respuesta {
+    width: 100%;
+    border: solid 2px;
+    border-color: #337ab7;
+    margin: 0;
+    border-radius: 0px 0px 5px 5px;
+    text-align: left;
+    padding: 2.5% 31% 2.5% 33%;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(-20px); /* Inicialmente fuera de la vista */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Animaciones para la opacidad y desplazamiento */
+    display: none;
+}
+
+.texto_respuesta.show {
+    opacity: 1; /* Hacer que sea completamente visible */
+    transform: translateY(0); /* Moverlo a su posición original */
+    display: block;
+}
+
+/* Animación para deslizamiento hacia abajo y fade-in */
+.texto_respuesta.show {
+    animation: slideDown 0.5s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+}
+
+.nueva_respuesta{
+    width: 100%;
+    border: solid 2px;
+    border-color: #337ab7;
+    margin: 0;
+    border-radius: 0px 0px 5px 5px;
+    text-align: left;
+    padding: 2.5% 31% 2.5% 33%;
+    box-sizing: border-box;
+    opacity: 1; /* Hacer que sea completamente visible */
+    transform: translateY(-20px); /* Inicialmente fuera de la vista */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Animaciones para la opacidad y desplazamiento */
+    display: flex;
+    flex-direction: column;
+}
+
+.imgcopiar_respuesta {
+    width: 30px;
+    height: 30px;
+    opacity: 0.5;
+    bottom: 5px;
+    right: 0;
+    position: absolute;
+    margin: 5px 5px 0 0;
+    cursor: pointer;
+}
+
+.imgcheck_respuesta {
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+    bottom: 5px;
+    right: 0;
+    position: absolute;
+    margin: 10px 10px 0 0;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+
+/* Animación personalizada para el deslizamiento */
+@keyframes slideDown {
+    from {
+        transform: translateY(0px); /* Inicia fuera de la vista */
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0); /* Desliza hasta su posición */
+        opacity: 1;
+    }
+}
+
+/* Animación para el deslizamiento hacia arriba (ocultar) */
+@keyframes slideUp {
+    from {
+        transform: translateY(0); /* Empieza en su lugar */
+        opacity: 1;
+    }
+    to {
+        transform: translateY(0px); /* Se mueve fuera de la vista */
+        opacity: 0; /* Se vuelve invisible */
+    }
+}
+
+/* Cuando la respuesta se oculta */
+.texto_respuesta.hide {
+    animation: slideUp 0.5s forwards; /* Animación de deslizamiento hacia arriba */
+    display: none; /* Después de la animación, el contenido se oculta */}
+
+.texto_input{
+    border: solid #cccccc 2px;
+    border-radius: 4px;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);
+    resize: none;
+
+}
+
+.texto_input:hover{
+    border-color: #2e9afe;
+    box-shadow: 3px 3px 3px #85bfed;
+}
+
+.texto_input.nombre{
+    width: 184px;
+    height: 30px;
+    padding: 0 8px;
+}
+
+.texto_input.texto{
+    width: 184px;
+    height: 200px;
+    padding: 8px;
+    
+}
+
+textarea:focus{
+    outline: none;
+    border-color: rgb(102, 175, 233);
+    box-shadow: 3px 3px 3px #85bfed;
+}
+
+input:focus{
+    outline: none;
+    border-color: rgb(102, 175, 233);
+    box-shadow: 3px 3px 3px #85bfed;
+
+}

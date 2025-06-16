@@ -1,0 +1,109 @@
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    .dropdown-submenu {
+        position: relative;
+    }
+
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg d-lg-block" style="height: auto;">
+    <div class="container-fluid">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" href="#"> <img src="/static/Image/CMW.png" alt="" width="auto" height="auto"
+                class="d-inline-block align-text-top" style="padding-bottom: 20px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarExample01"
+            aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarExample01" style="padding-bottom: 10px;">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('usuarios') }}" style="color: black;">Usuarios</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
+                        Políticas
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('politicasTeams') }}">Políticas Alta</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('PoliticasTeamsBaja') }}">Políticas Baja</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: black;" href="{{ url_for('cuentas') }}">Cuentas</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" style="color: black;">
+                        Scripts
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('scripts') }}">Generar Scripts</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('scriptsAccount') }}">Scripts por cuenta</a></li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdownNew"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Clientes Nuevos
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownNew">
+                                <li><a class="dropdown-item" href="{{ url_for('PoliticasClienteNuevo') }}">Politicas
+                                        Clientes Nuevos</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('ScriptsClienteNuevo') }}">Scripts
+                                        Clientes Nuevos</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-item" href="{{ url_for('log') }}">Logs</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color: black;" href="{{ url_for('docs') }}">Documentación</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav d-flex flex-row">
+                <li class="nav-item me-3 me-lg-0">
+                    <a class="nav-link" style="color: black;">Bienvenido, {{ user }}!</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav d-flex flex-row">
+                <li class="nav-item me-3 me-lg-0">
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger" role="button">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.dropdown-submenu .dropdown-toggle').forEach(function (element) {
+            element.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                let submenu = this.nextElementSibling;
+                submenu.classList.toggle('show');
+            });
+        });
+
+        // Close submenus when the main menu is closed
+        document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+            dropdown.addEventListener('hidden.bs.dropdown', function () {
+                this.querySelectorAll('.dropdown-submenu .dropdown-menu').forEach(function (submenu) {
+                    submenu.classList.remove('show');
+                });
+            });
+        });
+    });
+</script>
+
+
+</script>

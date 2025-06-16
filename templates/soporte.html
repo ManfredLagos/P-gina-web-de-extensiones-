@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callmyway :: Comunicacion a mi manera</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+    <link id="logo" rel="icon" href="{{ url_for('static', filename='imagenes/titulo.ico') }}" type="image/ico">
+    <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
+</head>
+<body class="contenedor">
+    <header class="cabeza">
+        <div>
+            <img class="imgcallmyway" src="{{ url_for('static', filename='imagenes/Captura_de_pantalla_2024-08-24_110935-removebg-preview.png') }}" alt="CallMyWay Logo">
+        </div>
+        <form class="bg-white rounded shadow-5-strong p-5" method="POST" action="/admin">
+            <div class="inicio_sesion">
+                <input type="text" id="text" class="input usuario" name="text" placeholder="Usuario">
+                <input type="password" id="password" class="input contraseña_usuario" name="password" placeholder="Contraseña">
+                <button type="submit" class="loging" data-mdb-ripple-init><img class="imgplay" src="{{ url_for('static', filename='imagenes/play.png') }}" alt="Imagen Play"></button>
+            </div>
+        </form>
+    </header>
+    <nav class="linea1"></nav>
+    <nav class="linea2">   
+        <div>
+            <a href="/"><button class="inicio" aria-label="Inicio">Inicio</button></a>
+            <a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>
+            <a href="/respuestas"><button class="respuestas" aria-label="Respuestas">Respuestas</button></a>
+        </div>
+    </nav>
+    <main class="cuerpo">
+        <div  class="seccion_fotos">
+            <div class="carrusel-container">
+                <div class="carrusel">
+                    <img class="imgfondo" src="{{ url_for('static', filename='imagenes/imagen1.jpeg') }}" alt="Imagen 1">
+                    <img class="imgfondo" src="{{ url_for('static', filename='imagenes/imagen2.jpeg') }}" alt="Imagen 1">
+                    <img class="imgfondo" src="{{ url_for('static', filename='imagenes/imagen3.jpeg') }}" alt="Imagen 1">
+                    <img class="imgfondo" src="{{ url_for('static', filename='imagenes/imagen4.jpeg') }}" alt="Imagen 1">
+                    <img class="imgfondo" src="{{ url_for('static', filename='imagenes/fondo_de_inicio.jpg') }}" alt="Imagen 1">
+                </div>
+                <button class="button_carrusel prev" onclick="moverImagen(-1)">&#10094;</button>
+                <button class="button_carrusel next" onclick="moverImagen(1)">&#10095;</button>
+            </div>
+        </div>
+
+    </main>
+    <footer class="pie1">
+        <div id="mensaje" style="display: none; margin: 0; padding: 0;">
+            <div id = "mensaje_error">
+                <img id="error" class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
+                <div class="mensaje">
+                    <p style="padding: 0; margin: 0;">¡Por favor, seleccione una opción válida e ingrese un valor superior a 0 para continuar!</p>
+                </div>
+                <a href="/"><button class="volver">Volver</button></a>
+            </div>
+        </div>
+        <div id="shadow" class="sombra"></div>
+    </footer>
+    <footer class="pie2">
+        CallMyWay y sus logos son marcas registradas bajo la propiedad de CallMyWay N.Y. S. A. Licenciados por la Sutel bajo el título SUTEL-TH-003. Todos los derechos reservados.
+    </footer>
+    <div class="pie3" style="display: none;"></div>
+</body>
+
+<script>
+// script.js
+
+let index = 0;  // Variable que guarda la posición de la imagen actual
+
+// Función para mover las imágenes en el carrusel
+function moverImagen(direccion) {
+    const imagenes = document.querySelectorAll('.imgfondo'); // Obtener todas las imágenes
+    const totalImagenes = imagenes.length;  // Total de imágenes
+
+    // Cambiar el índice de la imagen mostrada
+    index += direccion;
+
+    // Si llegamos al principio, ir al final
+    if (index < 0) {
+        index = totalImagenes - 1;
+    } 
+    // Si llegamos al final, volver al principio
+    else if (index >= totalImagenes) {
+        index = 0;
+    }
+
+    // Calcular la nueva posición del carrusel
+    const nuevaPosicion = -index * 800;  // Desplazamos 800px para cada imagen (ancho de la imagen)
+    
+    // Mover el contenedor de las imágenes
+    document.querySelector('.carrusel').style.transform = `translateX(${nuevaPosicion}px)`;
+}
+
+</script>
+
+</html>

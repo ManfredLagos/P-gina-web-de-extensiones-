@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="seccion_texto">
+    <div class="titulo_texto">
+        <div class="bienvenido">
+            <h1>Texto del correo</h1>
+        </div>
+    </div>
+    <div class="cuerpo_texto">
+        <div class="texto2">
+            <div style="position: relative;">            
+                <img id="imagen" class="imgcopiar" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiarTexto()">
+                <img id="check" class="imgcheck" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                <p id="copiar_texto">
+                    <span class="saludo"></span><br><br>
+                    Espero se encuentre muy bien.<br><br>
+                    Favor ejecutar el script que se encuentra en el archivo comprimido adjunto <span class="miarchivo"></span>.rar. Para ello, favor guardar el archivo <span class="miarchivo"></span>.ps1 directamente en la raíz "C:\", seguidamente abrir PowerShell como administrador y ubicarse en "C:\" para la ejecución del script.<br><br>
+                    A continuación puede observar el ejemplo de cómo ejecutar los comandos:<br><br>
+                    PS C:\WINDOWS\system32> cd C:\<br><br>
+                    PS C:\> .\<span class="miarchivo"></span>.ps1<br><br>
+                    Tras la ejecución del script estaría completada la configuración respectiva. Una vez que finalice el proceso, favor compartirnos el archivo Config_IMC_<span class="miarchivo"></span>.txt, que encontrará en el escritorio.<br><br>
+                    Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                    Saludos cordiales,
+                </p></div>
+        </div>
+    </div>
+    <div class="nuevo_script">
+        <div class="continuar">
+            <a href="/"><button class="button_nuevo_script">Nuevo Script</button></a>
+        </div>
+    </div>
+</div>
+
+<script>
+window.onload = function() {
+    // Recuperar el nombre del archivo de localStorage
+    const archivo_guardado = localStorage.getItem('nombre_documento');
+    console.log('Archivo recuperado de localStorage:', archivo_guardado);  // Agrega esta línea
+    const saludo = obtenerSaludo();
+
+    // Seleccionar todos los elementos con la clase 'miarchivo' y actualizar su contenido
+    const elementosArchivo = document.querySelectorAll('.miarchivo');
+    if (archivo_guardado) {
+        elementosArchivo.forEach(function(elemento) {
+            elemento.innerText = archivo_guardado;
+        });
+    }
+
+    // Seleccionar todos los elementos con la clase 'saludo' y actualizar su contenido
+    const elemento_saludo = document.querySelectorAll('.saludo');
+    if (saludo) {
+        elemento_saludo.forEach(function(elemento1) {
+            elemento1.innerText = saludo;
+        });
+    }
+
+};
+</script>
+
+{% endblock %}

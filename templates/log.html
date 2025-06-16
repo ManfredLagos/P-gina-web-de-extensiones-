@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallMyWay</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Image/Logo.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">       
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/program.js') }}"></script>
+</head>
+
+<body>
+    {% include 'navbarAdmin.html' %}
+    <header>
+        <h1>Registro de Creación de Scripts</h1>
+    </header>
+<body>
+    <section class="policy-list">
+        <table>
+            <thead>
+                <tr>
+                    <th style="display: none;">ID</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Nombre Script</th>
+                    <th scope="col">Creación</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td style="display: none;">{{ log[0] }}</td>
+                    <td>{{ log[1] }}</td>
+                    <td>{{ log[2] }}</td>
+                    <td>{{ log[3] }}</td>
+                    <td>{{ log[4] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">No hay registros disponibles.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+        integrity="sha384-eMNrsnIwl7l0RQH/pV2tbU86smNpbxWAgq8R/6yWZQQPAhGl1e02hHG7xQxBkVoE"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGZj+LcNbVMkd8NU6M0rLvKOHe8lU0OXUS6k5lsOHANW+ZezW+Y9C6kV0yM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    <div>
+        <div class="titulo">
+            <div class="bienvenido">
+                <h1>Respuestas Rápidas</h1>
+            </div>
+        </div>
+        <div class="contenedor_global">
+            <div class="contenedor_respuesta">
+                <div id="respuesta_0" class="titulo_respuesta" style="border-radius:  5px 5px 0 0;">
+                    <p class="titulo_respuesta_p">Crear Respuesta</p>
+                </div>
+                <div id="texto_respuesta_0" class="texto_respuesta show" style="position: relative; border-radius: 0 0 5px 5px;">
+                    <div style="display: flex;">
+                        <label for="nombre_nueva_respuesta" style="color: #003c77; font-weight: 500; font-size: 16px; padding-right: 36px;">Titulo de la respuesta</label>
+                        <input class="texto_input nombre" type="text" name="nombre_nueva_respuesta">
+                    </div>
+                    <div style="display: flex; margin-top: 10px;">
+                        <label for="texto_nueva_respuesta" style="color: #003c77; font-weight: 500; font-size: 16px; padding: 80px 5px 0 0;">Contenido de la respuesta</label>
+                        <textarea class="texto_input texto" name="texto_nueva_respuesta"></textarea>
+                    </div>
+                    <div style="display: flex; align-items: end; justify-content: center; margin: 40px 0 0 0;">
+                        <div>
+                            <button class="guardar_respuesta">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contenedor_respuesta">
+                <div id="respuesta_1" class="titulo_respuesta" onclick="mostrar_respuesta(1)">
+                    <p class="titulo_respuesta_p">Recargas</p>
+                </div>
+                <div id="texto_respuesta_1" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_1">
+                        <span class="saludo_respuesta"></span><br><br>
+                        Espero se encuentre muy bien.<br><br>
+                        Su recarga ha sido acreditada en su cuenta.<br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_1" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(1)">
+                    <img id="check_respuesta_1" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>
+            <div class="contenedor_respuesta">
+                <div id="respuesta_2" class="titulo_respuesta" onclick="mostrar_respuesta(2)">
+                    <p class="titulo_respuesta_p">Validar con desarrollo</p>
+                </div>
+                <div id="texto_respuesta_2" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_2">
+                        <span class="saludo_respuesta"></span><br><br>
+                        Espero se encuentre muy bien.<br><br>
+                        Vamos a validar su solicitud con nuestro departamento de desarrollo. En breve, le estaremos brindando las actualizaciones del caso.<br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_2" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(2)">
+                    <img id="check_respuesta_2" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>            
+            <div class="contenedor_respuesta">
+                <div id="respuesta_3" class="titulo_respuesta" onclick="mostrar_respuesta(3)">
+                    <p class="titulo_respuesta_p">Confirmar cambios realizados</p>
+                </div>
+                <div id="texto_respuesta_3" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_3">
+                        <span class="saludo_respuesta"></span><br><br>
+                        Espero se encuentre muy bien.<br><br>
+                        El cambio solicitado se ha realizado correctamente, por favor, realizar las pruebas de verificación. <br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_3" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(3)">
+                    <img id="check_respuesta_3" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>            
+            <div class="contenedor_respuesta">
+                <div id="respuesta_4" class="titulo_respuesta" onclick="mostrar_respuesta(4)">
+                    <p class="titulo_respuesta_p">Copia a vendedor de la cuenta</p>
+                </div>
+                <div id="texto_respuesta_4" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_4">
+                        <span class="saludo_respuesta"></span><br><br>
+                        Espero se encuentre muy bien.<br><br>
+                        Realizo copia al vendedor de la cuenta para que le brinde asistencia con la información solicitada.<br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_4" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(4)">
+                    <img id="check_respuesta_4" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>            
+            <div class="contenedor_respuesta">
+                <div id="respuesta_5" class="titulo_respuesta" onclick="mostrar_respuesta(5)">
+                    <p class="titulo_respuesta_p">Solicitar actualizaciones del caso</p>
+                </div>
+                <div id="texto_respuesta_5" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_5">
+                        <span class="saludo_respuesta"></span><br><br>
+                        ¿Tiene alguna actualización sobre el caso?<br><br>
+                        Si no tenemos noticias suyas en las próximas 24 horas, asumiremos que el problema o la solicitud fue resuelta y procederemos con cierre del ticket.<br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_5" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(5)">
+                    <img id="check_respuesta_5" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>
+            <div class="contenedor_respuesta">
+                <div id="respuesta_6" class="titulo_respuesta" onclick="mostrar_respuesta(6)">
+                    <p class="titulo_respuesta_p">Confirmar el funcionamiento</p>
+                </div>
+                <div id="texto_respuesta_6" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_6">
+                        <span class="saludo_respuesta"></span><br><br>
+                        Espero que se encuentre muy bien.<br><br>
+                        Hemos realizado las verificaciones correspondientes al caso. Le solicitamos, por favor, proceder con las pruebas necesarias para confirmar el funcionamiento.<br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_6" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(6)">
+                    <img id="check_respuesta_6" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>
+
+            <div class="contenedor_respuesta">
+                <div id="respuesta_7" class="titulo_respuesta" onclick="mostrar_respuesta(7)">
+                    <p class="titulo_respuesta_p">Cuenta no autorizada</p>
+                </div>
+                <div id="texto_respuesta_7" class="texto_respuesta" style="position: relative;">
+                    <p id="respuesta_p_7">
+                        <span class="saludo_respuesta"></span><br><br>
+                        Espero que se encuentre muy bien.<br><br>
+                        Para proceder con la solicitud, es necesario que sea aprobada desde uno de los correos autorizados de la cuenta. Por ello, realizo copia a los correos autorizados para que puedan brindarnos la aprobación correspondiente.<br><br>
+                        Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.<br><br>
+                        Saludos cordiales,
+                    </p>
+                    <img id="imagen_respuesta_7" class="imgcopiar_respuesta" src="{{ url_for('static', filename='imagenes/archivo.png') }}" alt="Imagen Copiar" onclick="copiar_respuesta(7)">
+                    <img id="check_respuesta_7" class="imgcheck_respuesta" src="{{ url_for('static', filename='imagenes/check.png') }}" alt="Imagen Check">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+//********************** Función para crear el saludo ****************************//
+window.onload = function() {
+    const saludo = obtenerSaludo();
+
+    // Seleccionar todos los elementos con la clase 'saludo' y actualizar su contenido
+    const elemento_saludo = document.querySelectorAll('.saludo_respuesta');
+    if (saludo) {
+        elemento_saludo.forEach(function(elemento1) {
+            elemento1.innerText = saludo;
+        });
+    }
+};
+//************************** Fin de la función *********************************//
+
+
+//**************** Función para mostrar u ocultar la respuesta ************************//
+// Función para mostrar u ocultar la respuesta
+function mostrar_respuesta(id) {
+    const texto_respuesta = document.getElementById('texto_respuesta_' + id);
+    const titulo_respuesta = document.getElementById('respuesta_' + id);
+
+    // Alternar la clase que maneja la visibilidad
+    texto_respuesta.classList.toggle('show');
+
+    if (texto_respuesta.classList.contains('show')) {
+        titulo_respuesta.style.borderRadius = "5px 5px 0px 0px";
+    } else {
+        titulo_respuesta.style.borderRadius = "5px";
+    }
+}
+
+
+//************************** Fin de la función *********************************//
+
+
+
+//*************** Funcion para copiar el texto de las respuestas*************************//
+function copiar_respuesta(id) {
+
+const texto = document.getElementById("respuesta_p_" + id).innerText;
+
+// Texto formateado a copiar
+var textoCompleto = `${texto}`;
+
+// Crear un elemento temporal para copiar al portapapeles
+var elementoTemporal = document.createElement('textarea');
+elementoTemporal.value = textoCompleto;
+document.body.appendChild(elementoTemporal);
+elementoTemporal.select();
+document.execCommand('copy');
+document.body.removeChild(elementoTemporal);
+
+// Confirmación de copiado
+var imagen = document.getElementById("imagen_respuesta_" + id);
+var check = document.getElementById("check_respuesta_" + id);
+
+imagen.style.visibility = "hidden";
+check.style.visibility = "visible";
+
+// Después de 3 segundos, volver a la imagen original
+setTimeout(function() {
+    // Esconde el check
+    check.style.visibility = "hidden";
+
+    // Muestra de nuevo la imagen original
+    imagen.style.visibility = "visible"; // Si usas 'display: none' aquí sería 'block'
+}, 3000);
+}
+//************************** Fin de la función *********************************//
+
+</script>
+{% endblock %}
+
+
+

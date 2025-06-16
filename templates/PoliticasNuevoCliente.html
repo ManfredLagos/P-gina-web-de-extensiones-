@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CallMyWay</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='Image/Logo.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/program.js') }}"></script>
+</head>
+<style>
+    #preview {
+        white-space: pre-wrap;
+        background-color: #012456;
+        color: #00ff00;
+        /* Aplicar clase powershell-prompt */
+        padding: 15px;
+        border: 1px solid #ddd;
+        margin-top: 20px;
+        font-family: Consolas, 'Courier New', monospace;
+        border-radius: 5px;
+        overflow: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        height: 300px;
+        box-sizing: border-box;
+    }
+
+    .powershell-prompt {
+        color: #00ff00;
+    }
+</style>
+
+<body>
+    {% include 'navbarAdmin.html' %}
+    <header>
+        <h1>Administración de Políticas</h1>
+    </header>
+    <main>
+        <section class="policy-form policy-list">
+            <h2>Política Cuenta Nueva</h2>
+            <div class="mb-3">
+                <select class="form-select" id="scriptESelect" name="scriptESelect" onchange="updateScriptE()">
+                    <option value="" disabled selected>Seleccionar tipo de cuenta</option>
+                    {% for id, nombre_politica, descripcion in descriptions %}
+                    <option value="{{ id }}" data-description="{{ descripcion }}">{{ nombre_politica }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <textarea id="preview" class="preview" style="color: white;"></textarea>
+            <div class="d-flex justify-content-center">
+                <button id="updateButton" class="btn btn-primary mt-3"
+                    style="background-color: green; border-color: green;">Actualizar</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 VoIP Teams. Todos los derechos reservados bajo la propiedad de CallMyWay N.Y. S.A.</p>
+    </footer>
+
+    <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Actualización de Política</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateScriptE() {
+            const selectElement = document.getElementById('scriptESelect');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const description = selectedOption.getAttribute('data-description');
+            const textarea = document.getElementById('preview');
+            textarea.textContent = description;
+        }
+
+        document.getElementById('updateButton').addEventListener('click', function () {
+            const textarea = document.getElementById('preview');
+            const description = textarea.value;
+            const id = document.getElementById('scriptESelect').value;
+
+            fetch('/update_policy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id, description: description }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const modalBody = document.getElementById('modalBody');
+                    if (data.success) {
+                        modalBody.textContent = 'Política actualizada correctamente';
+                    } else {
+                        modalBody.textContent = 'Error al actualizar la política: ' + data.error;
+                    }
+                    const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+                    updateModal.show();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const modalBody = document.getElementById('modalBody');
+                    modalBody.textContent = 'Error al actualizar la política';
+                    const updateModal = new bootstrap.Modal(document.getElementById('updateModal'));
+                    updateModal.show();
+                });
+        });
+    </script>
+</body>
+
+</html>

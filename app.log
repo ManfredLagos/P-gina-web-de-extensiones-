@@ -1,0 +1,57 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:27] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:28] "[36mGET /static/js/mdb.umd.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:28] "[36mGET /static/css/mdb.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:33] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:33] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:33] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:26:33] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\Soporte\\Desktop\\Script\\Script_Nuevo\\Script_Baja_Alta\\conexiónDB.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:17] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:17] "[36mGET /static/css/mdb.min.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:17] "[36mGET /static/js/mdb.umd.min.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:25] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:25] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:25] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:25] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:28:32] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:29:34] "[35m[1mPOST / HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:29:35] "[36mGET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:29:35] "[36mGET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [21/Apr/2024 13:29:35] "[36mGET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug: * Detected change in 'c:\\Users\\Soporte\\Desktop\\Script\\Script_Nuevo\\Script_Baja_Alta\\conexiónDB.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 120-209-473
+INFO:werkzeug: * Detected change in 'c:\\Users\\Soporte\\Desktop\\Script\\Script_Nuevo\\Script_Baja_Alta\\conexiónDB.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug: * Restarting with stat

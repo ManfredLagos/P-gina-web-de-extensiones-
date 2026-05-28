@@ -1,0 +1,43 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+  
+<h1>Respuestas Rápidas</h1>
+<div class="form-container"></div>
+
+<div id="board">
+    <!-- Post-it: Crear nueva respuesta -->
+    <div class="note note-create">
+        <form id="noteForm">
+            <div class="note-header">
+                <input type="text" id="title" placeholder="Título de la respuesta"required>
+            </div>
+            <textarea class="note-content" id="content" placeholder="Escriba aquí la respuesta rápida..."required></textarea>
+            <div class="note-options">
+                <select id="color">
+                    <option value="green">Verde</option>
+                    <option value="blue">Azul</option>
+                    <option value="yellow">Amarillo</option>
+                </select>
+                <label class="checkbox">
+                    <input type="checkbox" id="addSaludo">
+                    Agregar saludo automático
+                </label>
+            </div>
+            <div class="note-footer">
+                <button type="submit" class="btn-save">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script src="{{ url_for('static', filename='funciones/respuestas_rapidas.js') }}" ></script>
+  <script>
+  const ICON_DELETE = "{{ url_for('static', filename='imagenes/borrar.png') }}";
+  const ICON_COPY   = "{{ url_for('static', filename='imagenes/archivo.png') }}";
+</script>
+
+{% endblock %}

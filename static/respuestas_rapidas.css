@@ -1,0 +1,194 @@
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f3f4f6;
+      padding: 20px;
+    }
+
+    h1 {
+        text-align: center; 
+        margin-bottom: 20px;
+        color: #004992;
+    }
+
+    .form-container { 
+        display: flex; 
+        justify-content: center; 
+        flex-wrap: wrap; gap: 20px; 
+        margin-bottom: 20px; 
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 280px;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, textarea, select, button { padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    button { background: #4f46e5; color: white; cursor: pointer; transition: 0.2s; }
+    button:hover { background: #3730a3; }
+    #board { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+    .note {
+      padding: 12px;
+      min-height: 120px;
+      cursor: grab;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s;
+    }
+    .note:active { transform: scale(1.05); cursor: grabbing; }
+    .note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .note-header h3 { margin: 0; font-size: 14px; flex-grow: 1; }
+    .note-content { font-size: 13px; flex-grow: 1; margin-bottom: 8px; }
+    .note-footer { display: flex; justify-content: flex-end; gap: 8px; }
+    .note img { width: 20px; height: 20px; cursor: pointer; transition: transform 0.2s; }
+    .note img:hover { transform: scale(1.15); }
+    .green { background: #bdf0bd; }
+    .blue { background: #b1cef5; }
+
+    #board{
+        margin-bottom: 20px;
+    }
+
+
+/* Board */
+#board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Nota base */
+.note {
+    position: relative;
+    padding: 0;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+}
+
+
+/* Hover PRO */
+.note:hover {
+    transform: translateY(-5px);
+}
+
+/* HEADER (la parte con sombra que usted quiere) */
+.note-header {
+    background: rgba(0,0,0,0.06);
+    padding: 10px;
+    font-weight: bold;
+    position: relative;
+    margin: 0;
+    box-shadow: inset 0 -1px 2px rgba(0,0,0,0.05);
+}
+
+.note-header h3 {
+    color: #4b4b4b;
+}
+
+/* Input del título */
+.note-header input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    font-size: 1rem;
+    outline: none;
+}
+
+/* Contenido */
+.note-content {
+    flex: 1;
+    border: none;
+    padding: 0 12px 12px 12px;
+    resize: none;
+    background: transparent;
+    outline: none;
+    font-size: 13px;
+    white-space: pre-line;
+    margin: 0;
+}
+
+/* Opciones */
+.note-options {
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.85rem;
+}
+
+/* Footer */
+.note-footer {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Botón */
+.note-footer button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.note-footer button:hover {
+    background: #1d4ed8;
+}
+
+/* 🎨 COLORES */
+.note.yellow { background: #fef08a; }
+.note.green { background: #bbf7d0; }
+.note.blue { background: #bfdbfe; }
+
+/* 🌟 ESQUINA DOBLADA */
+.note::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50px;
+    height: 15px;
+    background: rgba(0,0,0,0.1);
+    clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+/* sombra de la esquina */
+.note::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    height: 20px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.15));
+}
+
+.btn-save {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-save:hover {
+    background: #2563eb;
+}

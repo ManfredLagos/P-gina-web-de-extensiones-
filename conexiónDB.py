@@ -1,3 +1,6 @@
+import pymysql
+pymysql.install_as_MySQLdb()
+
 from flask import Flask, session,redirect, url_for, jsonify, render_template,request, send_file
 import bcrypt
 import mysql.connector
@@ -9,7 +12,7 @@ import io
 from news_scripts import get_news
 from io import BytesIO
 from urllib.parse import urlparse
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
@@ -21,22 +24,35 @@ app.secret_key = '@\xf6\xdd\x16.\x9b?\xbbHx\xc0\x95fr\x1b\xb7\xf5l\tF\xfe\xf4\xa
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'xls', 'xlsx'}
 
+def get_db_connection():
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="manfred",
+            password="Man22fr15ed23",
+            database="postits_db"
+        )
+        return conexion
+    except Error as e:
+        print("🔥 Error al conectar a MySQL:", e)
+        return None
+
 # Función para verificar la extensión del archivo
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
-def get_db_connection():
-    try:
-        conexion = mysql.connector.connect(
-            host='192.168.88.214',      
-            user='callmyway',     
-            password='call$9222',  
-            database='Script_Teams',
-        )
-        return conexion
-    except ConnectionError as e:
-        print(f"Error al conectar a MySQL: {e}")
-        return None
+#def get_db_connection():
+    #try:
+        #conexion = mysql.connector.connect(
+            #host='192.168.88.214',      
+            #user='callmyway',     
+            #password='call$9222',  
+            #database='Script_Teams',
+        #)
+        #return conexion
+    #except ConnectionError as e:
+        #print(f"Error al conectar a MySQL: {e}")
+        #return None
     
 def log_script_creation(user_name, script_name, description):
     conn = get_db_connection()
@@ -1218,7 +1234,7 @@ def descargar_script():
                     print(f"Números encontrados: {numeros}")
 
                     # Si no se encontraron correos o extensiones, devolver un error
-                    if not correos or not extensiones:
+                    if not correos:
                         print(f"No se encontraron correos o extensiones válidos en el archivo.")
                         return jsonify({"error": "El archivo Excel no contiene correos o extensiones válidos."}), 400
                 else:
@@ -1860,6 +1876,94 @@ def texto():
 @app.route('/respuestas')
 def respuestas():
     return render_template('respuestas.html')
+
+#-------------------------------------  Post It  ----------------------------------------
+
+@app.route('/prueba')
+def prueba():
+    return render_template('prueba.html')
+
+@app.route('/get_notes')
+def get_notes():
+    try:
+        user_id = 1
+        conn = get_db_connection()
+        cur = conn.cursor(dictionary=True)
+        cur.execute("""
+            SELECT id, title, content, color, position
+            FROM notes
+            WHERE user_id=%s
+            ORDER BY position ASC
+        """, (user_id,))
+        
+        notes = cur.fetchall()
+        cur.close()
+        conn.close()
+
+        return jsonify({'notes': notes})
+
+    except Exception as e:
+        print("🔥 ERROR EN /get_notes:", e)
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/add_note', methods=['POST'])
+def add_note():
+    data = request.json
+    user_id = 1
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO notes (user_id, title, content, color)
+        VALUES (%s, %s, %s, %s)
+    """, (user_id, data['title'], data['content'], data['color']))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({'status': 'ok'})
+
+@app.route('/delete_note/<int:note_id>', methods=['DELETE'])
+def delete_note(note_id):
+    user_id = 1
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        DELETE FROM notes
+        WHERE id=%s AND user_id=%s
+    """, (note_id, user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({'status': 'ok'})
+
+@app.route('/update_positions', methods=['PATCH'])
+def update_positions():
+    data = request.json
+    user_id = 1
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    for p in data['positions']:
+        cur.execute("""
+            UPDATE notes
+            SET position=%s
+            WHERE id=%s AND user_id=%s
+        """, (p['position'], p['id'], user_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return jsonify({'status': 'ok'})
 
 # Ejecutar la aplicación
 if __name__ == "__main__":

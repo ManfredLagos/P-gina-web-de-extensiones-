@@ -197,6 +197,16 @@
     seccion_baja.style.display = "block";
 }
 
+document.getElementById('machote').addEventListener('click', function(event) {
+    event.preventDefault();  // Evitar que se envíe el formulario al hacer clic
+
+    const url = '/static/archivos/extensiones_teams.xlsx';  // Reemplaza con la URL real del archivo en tu servidor
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'extensiones_teams.xlsx';  // Nombre con el que se descargará el archivo
+    link.click();  // Ejecuta el clic del enlace para iniciar la descarga
+});
+
 </script>
 
 {% endblock %}

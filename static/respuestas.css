@@ -158,15 +158,15 @@
     
 }
 
-textarea:focus{
+/*textarea:focus{
     outline: none;
     border-color: rgb(102, 175, 233);
     box-shadow: 3px 3px 3px #85bfed;
-}
+}*/
 
-input:focus{
+/*input:focus{
     outline: none;
     border-color: rgb(102, 175, 233);
     box-shadow: 3px 3px 3px #85bfed;
 
-}
+}*/

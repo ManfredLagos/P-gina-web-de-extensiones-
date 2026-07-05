@@ -8,25 +8,27 @@
 
 <div id="board">
     <!-- Post-it: Crear nueva respuesta -->
-    <div class="note note-create">
+    <div class="note note-create" style="background: #fef08a;">
         <form id="noteForm">
             <div class="note-header">
                 <input type="text" id="title" placeholder="Título de la respuesta"required>
+                    <div class="color-picker">
+                        <div class="selected green"></div>
+                        <div class="option option2 blue" data-color="blue"></div>
+                        <div class="option option1 green" data-color="green"></div>
+                    </div>
+                <img style="width: 18px; height: 18px;" src="/static/imagenes/mas.png">
+                <img style="display: none;" alt="Eliminar" onclick="eliminarNota(1)">
             </div>
             <textarea class="note-content" id="content" placeholder="Escriba aquí la respuesta rápida..."required></textarea>
             <div class="note-options">
-                <select id="color">
-                    <option value="green">Verde</option>
-                    <option value="blue">Azul</option>
-                    <option value="yellow">Amarillo</option>
-                </select>
-                <label class="checkbox">
-                    <input type="checkbox" id="addSaludo">
-                    Agregar saludo automático
-                </label>
-            </div>
-            <div class="note-footer">
-                <button type="submit" class="btn-save">Guardar</button>
+                <div class="checkbox_cuerpo">
+                    <span>Agregar cuerpo a la respuesta</span>
+                    <label class="switch_cuerpo">
+                        <input type="checkbox" id="respuesta_cuerpo" checked>
+                        <span class="slider_cuerpo"></span>
+                    </label>
+                </div>
             </div>
         </form>
     </div>
@@ -38,6 +40,25 @@
   <script>
   const ICON_DELETE = "{{ url_for('static', filename='imagenes/borrar.png') }}";
   const ICON_COPY   = "{{ url_for('static', filename='imagenes/archivo.png') }}";
+</script>
+
+<script>
+    const picker = document.querySelector(".color-picker");
+    const selected = document.querySelector(".selected");
+    selected.onclick = () => {
+        picker.classList.toggle("open");
+    }
+    document.querySelectorAll(".option").forEach(option => {
+        option.onclick = () => {
+            selected.className = "selected " + option.dataset.color;
+            picker.classList.remove("open");
+        }
+    });
+    document.addEventListener("click", e => {
+        if (!picker.contains(e.target)) {
+            picker.classList.remove("open");
+        }
+    });
 </script>
 
 {% endblock %}

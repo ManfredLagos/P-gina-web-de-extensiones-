@@ -77,8 +77,13 @@
 .img_error{
     height: 45px;
     width: 45px;
-    margin: 0 90% 7px 0;
-    
+    margin: 0 90% 7px 0;  
+}
+
+.img_inicio{
+    height: 45px;
+    width: 45px;
+    margin: 0 90% 7px 0;  
 }
 
 .imgfondo{

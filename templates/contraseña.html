@@ -1,425 +1,71 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Generador de Contraseñas</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        padding: 30px;
-    }
-    h1 {
-        text-align: center;
-        color: #004992;
-    }
-    .container {
-        max-width: 700px;
-        margin: auto;
-        background: #747474;
-        padding: 20px;
-        border-radius: 12px;
-    }
-    label {
-        display: block;
-        color: #004992;
-        font-size: 17px;
-        font-weight: 600;
-    }
-    .options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-    }
-    .password {
-        background: #acacac;
-        padding: 10px;
-        margin-top: 10px;
-        border-radius: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: text;
-    }
-    .password span {
-        user-select: all;
-    }
-    .actions button {
-        margin-left: 5px;
-        padding: 5px 8px;
-        font-size: 12px;
-    }
 
-    .datos{
-        display: flex; 
-        flex-direction:row; 
-        gap: 10px;
-    }
+{% extends 'base.html' %}
 
-    .generar {
-        background-color: #337ab7;
-        color: rgb(255, 255, 255);
-        border: none;
-        cursor: pointer;
-        width: 180px; /* Ancho fijo para los botones */
-        height: 50px; /* Alto fijo para los botones */
-        font-weight: bolder;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);
-        border-radius: 6px;
-        font-size: 24px;
-        text-align: center;
-        margin: 5px 0 10px 0px;
-    }
+{% block content %}
 
-    .generar:hover {       
-        background-color: #286090;
-    }
+<div class="contenedor_contraseñas">
+    <h1>Generador de Contraseñas</h1>
 
-    .longitud {
-        background-color: #ffffff;
-        color: #747474;
-        width: 80px; /* Ancho fijo para los botones */
-        height: 40px; /* Alto fijo para los botones */
-        font-weight: 700;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);
-        border-radius: 6px;
-        font-size: 16px;
-        text-align: left;
-        border-color: rgb(187, 187, 187);
-        margin: 4px 5px;
-        padding: 0 0 0 10px;
-        border-width: 2px;
-        border-style: solid;
-}
+    <div class="container">
+        <div class="row">
+            <div class="box">
+                <label>Longitud: <span class="value" id="lengthValue">12</span></label>
+                <input type="range" id="length" min="4" max="32" value="12">
+            </div>
 
-.longitud:hover {
-    background: #eff5fb;
-}
-
-.longitud:focus {
-    border-color: rgb(102, 175, 233);
-    box-shadow: 1px 1px 1px #85bfed;
-    outline: none;
-}
-
-
-/* STRENGTH */
-.strength {
-    height: 10px;
-    background: #1e293b;
-    border-radius: 10px;
-    margin-top: 20px;
-}
-
-#strengthBar {
-    height: 100%;
-    width: 0%;
-    border-radius: 10px;
-    transition: 0.4s;
-}
-
-#strengthText {
-    font-size: 14px;
-    margin-top: 5px;
-    display: block;
-}
-
-/* TOGGLES */
-.options {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #1e293b;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-}
-
-/* SWITCH */
-.switch {
-    position: relative;
-    width: 45px;
-    height: 24px;
-}
-
-.switch input {
-    display: none;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    background: #6d819c;
-    border-radius: 20px;
-    width: 100%;
-    height: 100%;
-    transition: 0.3s;
-}
-
-.slider::before {
-    content: "";
-    position: absolute;
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    top: 3px;
-    background: white;
-    border-radius: 50%;
-    transition: 0.3s;
-}
-
-.switch input:checked + .slider {
-    background: #286090;
-}
-
-.switch input:checked + .slider::before {
-    transform: translateX(21px);
-}
-
-
-</style>
-</head>
-<body>
-
-<h1>Generador de Contraseñas</h1>
-
-<div class="container">
-    <div class="datos">
-        <label>Longitud:</label>
-        <input class="longitud" type="number" id="length" value="12" min="4" max="50">
-
-        <label>Cantidad de contraseñas:</label>
-        <input class="longitud" type="number" id="cantidad" value="1" min="1" max="20">
-    </div>
-
-    <div class="options">
-        <div class="toggle">
-            <span>Mayúsculas</span>
-            <label class="switch">
-                <input type="checkbox" id="upper" checked>
-                <span class="slider"></span>
-            </label>
+            <div class="box">
+                <label>Cantidad: <span class="value" id="quantityValue">1</span></label>
+                <input type="range" id="quantity" min="1" max="10" value="1">
+            </div>
         </div>
 
-        <div class="toggle">
-            <span>Minúsculas</span>
-            <label class="switch">
-                <input type="checkbox" id="lower" checked>
-                <span class="slider"></span>
-            </label>
+        <div class="options">
+            <div class="toggle">
+                <span>Mayúsculas</span>
+                <label class="switch">
+                    <input type="checkbox" id="upper" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle">
+                <span>Minúsculas</span>
+                <label class="switch">
+                    <input type="checkbox" id="lower" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle">
+                <span>Números</span>
+                <label class="switch">
+                    <input type="checkbox" id="numbers" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle">
+                <span>Caracteres especiales</span>
+                <label class="switch">
+                    <input type="checkbox" id="symbols" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
 
-        <div class="toggle">
-            <span>Números</span>
-            <label class="switch">
-                <input type="checkbox" id="numbers" checked>
-                <span class="slider"></span>
-            </label>
+        <div class="strength">
+            <div id="strengthBar"></div>
+        </div>
+        <span id="strengthText">Seguridad</span>
+
+        <div class="generar">
+            <button onclick="generatePassword()">Generar</button>
         </div>
 
-        <div class="toggle">
-            <span>Caracteres especiales</span>
-            <label class="switch">
-                <input type="checkbox" id="symbols" checked>
-                <span class="slider"></span>
-            </label>
-        </div>
+        <div class="result"></div>
     </div>
-
-    <div class="strength">
-        <div id="strengthBar"></div>
-    </div>
-    <span id="strengthText">Seguridad</span>
-
-    <div style="display: flex; justify-content: center; margin-top: 15px;">
-        <button class="generar" onclick="generar()">Generar</button>
-    </div>
-
-    <div id="resultado"></div>
 </div>
 
-<script>
-function generarPassword(longitud, charset) {
-    let pass = "";
-    for (let i = 0; i < longitud; i++) {
-        pass += charset[Math.floor(Math.random() * charset.length)];
-    }
-    return pass;
-}
+<script src="{{ url_for('static', filename='funciones/contraseñas.js') }}"></script>
 
-function obtenerCharset() {
-    let chars = "";
-
-    if (document.getElementById("mayus").checked)
-        chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    if (document.getElementById("minus").checked)
-        chars += "abcdefghijklmnopqrstuvwxyz";
-
-    if (document.getElementById("nums").checked)
-        chars += "0123456789";
-
-    if (document.getElementById("chars").checked)
-        chars += "!@#$%&_?";
-
-    return chars;
-}
-
-function copiar(texto) {
-    navigator.clipboard.writeText(texto);
-}
-
-function regenerar(span, longitud, charset) {
-    span.textContent = generarPassword(longitud, charset);
-}
-
-function generar() {
-    let contenedor = document.getElementById("resultado");
-    contenedor.innerHTML = "";
-
-    let longitud = parseInt(document.getElementById("length").value);
-    let cantidad = parseInt(document.getElementById("cantidad").value);
-    let charset = obtenerCharset();
-
-    if (charset === "") {
-        alert("Seleccione al menos una opción");
-        return;
-    }
-
-    for (let i = 0; i < cantidad; i++) {
-        let pass = generarPassword(longitud, charset);
-
-        let div = document.createElement("div");
-        div.className = "password";
-
-        let span = document.createElement("span");
-        span.textContent = pass;
-
-        // Doble click para copiar
-        span.ondblclick = () => copiar(span.textContent);
-
-        let acciones = document.createElement("div");
-        acciones.className = "actions";
-
-        let imgCopy = document.createElement("img");
-        imgCopy.src = "/P-gina-web-de-extensiones-/static/imagenes/archivo.png";
-        imgCopy.alt = "Copiar";
-        imgCopy.title = "Copiar contraseña";
-        imgCopy.style.cursor = "pointer";
-        imgCopy.style.width = "25px";
-        imgCopy.style.marginRight = "10px";
-
-        imgCopy.onclick = () => copiar(span.textContent);
-
-
-        let imgRegen = document.createElement("img");
-        imgRegen.src = "/P-gina-web-de-extensiones-/static/imagenes/cargar 2.png"
-        imgRegen.alt = "Cambiar";
-        imgRegen.title = "Generar otra contraseña";
-        imgRegen.style.cursor = "pointer";
-        imgRegen.style.width = "25px";
-
-        imgRegen.onclick = () => regenerar(span, longitud, charset);
-
-        acciones.appendChild(imgCopy);
-        acciones.appendChild(imgRegen);
-
-        div.appendChild(span);
-        div.appendChild(acciones);
-
-        contenedor.appendChild(div);
-    }
-}
-
-function checkStrengthConfig() {
-    const length = parseInt(lengthEl.value);
-
-    const upper = upperEl.checked;
-    const lower = lowerEl.checked;
-    const numbers = numbersEl.checked;
-    const symbols = symbolsEl.checked;
-
-    let charsetSize = 0;
-
-    if (lower) charsetSize += 15;
-    if (upper) charsetSize += 20;
-    if (numbers) charsetSize += 10;
-    if (symbols) charsetSize += 25;
-
-    let bonus = 0;
-    if (length >= 16) bonus = 30;
-    else if (length >= 12) bonus = 25;
-    else if (length >= 8) bonus = 20;
-    else if (length >= 6) bonus = 15;
-
-    charsetSize += bonus;
-
-    if (charsetSize === 0) {
-        updateUI(0);
-        return;
-    }
-
-    let score = charsetSize;
-
-    updateUI(score);
-}
-
-function updateUI(score) {
-    console.log("Score:", score);
-
-    if (score < 25) {
-        strengthBar.style.width = "20%";
-        strengthBar.style.background = "#dc2626"; // rojo fuerte
-        strengthText.innerText = "Muy débil";
-    } 
-    else if (score < 50) {
-        strengthBar.style.width = "35%";
-        strengthBar.style.background = "#f97316"; // naranja
-        strengthText.innerText = "Débil";
-    } 
-    else if (score < 65) {
-        strengthBar.style.width = "50%";
-        strengthBar.style.background = "#eab308"; // amarillo
-        strengthText.innerText = "Media";
-    } 
-    else if (score < 80) {
-        strengthBar.style.width = "70%";
-        strengthBar.style.background = "#84cc16"; // verde lima
-        strengthText.innerText = "Fuerte";
-    } 
-    else if (score < 96) {
-        strengthBar.style.width = "90%";
-        strengthBar.style.background = "#22c55e"; // verde
-        strengthText.innerText = "Muy fuerte";
-    }
-    else {
-        strengthBar.style.width = "100%";
-        strengthBar.style.background = "#06b6d4"; // azul (nivel máximo)
-        strengthText.innerText = "Super fuerte";
-    }
-}
-
-function randomChar(str) {
-    return str[Math.floor(Math.random() * str.length)];
-}
-
-function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-}
-
-function copy() {
-    outputEl.select();
-    document.execCommand("copy");
-}
-
-checkStrengthConfig();
-</script>
-
-</body>
-</html>
+{% endblock %}

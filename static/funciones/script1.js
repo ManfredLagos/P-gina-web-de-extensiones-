@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mostrarradio(this); // Pasamos el radio clicado
         });
     });
+    
 });
 
 function mostrarradio(clickedRadio) {
@@ -185,7 +186,7 @@ document.addEventListener('keydown', function(event) {
     // Si el mensaje de error está visible y se presiona Enter
     if (event.key === 'Enter' && document.getElementById('mensaje').style.display === 'block') {
         event.preventDefault(); // Prevenir el comportamiento predeterminado
-        document.querySelector('.volver').click(); // Simula clic en "Volver"
+        document.querySelector('.btn_modal').click(); // Simula clic en "Volver"
         return; // Salir para evitar otros manejos de "Enter"
     }
 
@@ -236,10 +237,6 @@ function handleSubmit(event) {
 }
 //************************************************** Fin de la función *************************************************//
 
-
-
-
-
 function descargarExcel(url, nombreArchivo) {
     fetch(url)
         .then(response => {
@@ -263,6 +260,35 @@ const urlDelArchivo = 'C:\Users\Soporte\Documents\carpeta de prueba\Sandbox Team
 const nombreArchivo = 'extensiones_teams.xlsx'; // Nombre con el que quieres guardar el archivo
 
 descargarExcel(urlDelArchivo, nombreArchivo);
+
+//---------------------------------------------------------------------------------
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+
+    const respuesta = await fetch("/check_session", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            fingerprint: result.visitorId
+        })
+    });
+
+    const data = await respuesta.json();
+
+    if (data.authenticated) {
+        fetchNotes();
+    } else {
+        document.getElementById("inicio_sesion").style.display = "block";
+        document.getElementById('shadow').style.display = "block";
+    }
+
+});
+
 
 
 

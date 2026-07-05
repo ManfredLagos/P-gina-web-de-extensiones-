@@ -41,7 +41,13 @@
     align-items: center;     /* Centrar verticalmente */
 }
 
-#mensaje_error{
+.modal_contenedor{
+    display: none; 
+    margin: 0; 
+    padding: 0;
+}
+
+.modal_informacion{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -58,7 +64,7 @@
     z-index: 9999; /* Asegúrate de que esté por encima de otros elementos */
 }
 
-.mensaje{
+.modal_texto{
     margin: 0 0 10px 0; 
     padding: 20px 0; 
     border-style: solid; 
@@ -72,6 +78,52 @@
     font-size: 18px;
     font-weight: 500;
 }
+
+.input_inicio{
+    width: 250px;
+    margin-left: 220px;
+    background-color: #ffffff;
+    color: #747474;
+    font-weight: 700;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .27);
+    border-radius: 6px;
+    font-size: 16px;
+    border-color: rgb(187, 187, 187);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.input_inicio:hover {
+    background: #eff5fb;
+}
+
+.input_inicio:focus {
+    border-color: rgb(102, 175, 233);
+    box-shadow: 2px 2px 2px #85bfed;
+    outline: none;                     /* Eliminar el enfoque predeterminado del navegador*/
+}
+
+.label_inicio{
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.regenerar_contraseña{
+    width: 118px;
+    padding: 0;
+    margin: 0 0 0 285px;
+    font-weight: 500;
+    font-size: 15px;
+    color: #19599c;
+    cursor: pointer;
+    border-bottom: 1px solid #19599c;
+}
+
+.regenerar_contraseña:hover{
+    color: rgb(11, 86, 199);
+}
+
+
 
 @media (min-height: 550px) {
 

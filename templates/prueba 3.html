@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Color</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eef3f7;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .color-picker {
+            position: relative;
+            width: 60px;
+        }
+
+        /* Color seleccionado */
+        .selected {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .25);
+            transition: .25s;
+        }
+
+        .selected:hover {
+            transform: scale(1.08);
+        }
+
+        /* Opciones */
+        .option {
+            position: absolute;
+            left: 0;
+
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+
+            box-shadow: 0 8px 18px rgba(0, 0, 0, .20);
+
+            opacity: 0;
+            pointer-events: none;
+
+            transition:
+                transform .35s cubic-bezier(.2, 1.3, .3, 1),
+                opacity .25s;
+        }
+
+        /* Posición cerrada */
+        .option1,
+        .option2 {
+            top: 0;
+            transform: translateY(0) scale(.5);
+        }
+
+        /* Abierto */
+
+        .color-picker.open .option {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .color-picker.open .option1 {
+            transform: translateY(75px);
+        }
+
+        .color-picker.open .option2 {
+            transform: translateY(150px);
+        }
+
+        /* Hover */
+
+        .color-picker.open .option1:hover {
+            transform: translateY(75px) scale(1.1);
+        }
+
+        .color-picker.open .option2:hover {
+            transform: translateY(150px) scale(1.1);
+        }
+
+        /* Colores */
+
+        .green {
+            background: #32C766;
+        }
+
+        .blue {
+            background: #2F80ED;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="color-picker">
+
+        <div class="selected green"></div>
+
+        <div class="option option1 green" data-color="green"></div>
+
+        <div class="option option2 blue" data-color="blue"></div>
+
+    </div>
+
+    <script>
+
+        const picker = document.querySelector(".color-picker");
+        const selected = document.querySelector(".selected");
+
+        selected.onclick = () => {
+
+            picker.classList.toggle("open");
+
+        }
+
+        document.querySelectorAll(".option").forEach(option => {
+
+            option.onclick = () => {
+
+                selected.className = "selected " + option.dataset.color;
+
+                picker.classList.remove("open");
+
+            }
+
+        });
+
+        document.addEventListener("click", e => {
+
+            if (!picker.contains(e.target)) {
+
+                picker.classList.remove("open");
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

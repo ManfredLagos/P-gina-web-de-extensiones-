@@ -1,6 +1,3 @@
-import pymysql
-pymysql.install_as_MySQLdb()
-
 from flask import Flask, session,redirect, url_for, jsonify, render_template,request, send_file
 import bcrypt
 import mysql.connector
@@ -9,17 +6,20 @@ from flask_wtf.csrf import CSRFProtect
 import random
 import string
 import io
-from news_scripts import get_news
+#from news_scripts import get_news#
 from io import BytesIO
 from urllib.parse import urlparse
-#from flask_mysqldb import MySQL
+from flask_mysqldb import MySQL
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
+from datetime import timedelta
 
 app = Flask(__name__)
 
 app.secret_key = '@\xf6\xdd\x16.\x9b?\xbbHx\xc0\x95fr\x1b\xb7\xf5l\tF\xfe\xf4\xa4\x1a'
+
+app.permanent_session_lifetime = timedelta(days=30)
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'xls', 'xlsx'}
@@ -28,8 +28,8 @@ def get_db_connection():
     try:
         conexion = mysql.connector.connect(
             host="localhost",
-            user="manfred",
-            password="Man22fr15ed23",
+            user="root",
+            password="123456789",
             database="postits_db"
         )
         return conexion
@@ -1883,87 +1883,267 @@ def respuestas():
 def prueba():
     return render_template('prueba.html')
 
-@app.route('/get_notes')
-def get_notes():
-    try:
-        user_id = 1
-        conn = get_db_connection()
-        cur = conn.cursor(dictionary=True)
+@app.route('/Genedador_contraseña')
+def Genedador_contraseña():
+    return render_template('contraseña.html')
+
+@app.route("/check_session", methods=["POST"])
+def check_session():
+    data = request.get_json()
+    fingerprint = data.get("fingerprint")
+    ip = request.remote_addr
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    cur.execute("""
+        SELECT
+            u.id,
+            u.nombre
+        FROM dispositivos d
+        INNER JOIN usuarios u
+            ON u.id = d.user_id
+        WHERE
+            d.ip=%s
+            AND d.fingerprint=%s
+    """, (ip, fingerprint))
+    usuario = cur.fetchone()
+
+    if usuario:
+        session["user_id"] = usuario["id"]
+        session["nombre"] = usuario["nombre"]
         cur.execute("""
-            SELECT id, title, content, color, position
-            FROM notes
-            WHERE user_id=%s
-            ORDER BY position ASC
-        """, (user_id,))
-        
-        notes = cur.fetchall()
+            UPDATE dispositivos
+            SET
+                ultimo_uso = NOW()
+            WHERE
+                ip=%s
+                AND fingerprint=%s
+        """, (ip, fingerprint))
+        conn.commit()
         cur.close()
         conn.close()
+        return jsonify({
+            "authenticated": True
+        })
 
-        return jsonify({'notes': notes})
+    cur.close()
+    conn.close()
 
-    except Exception as e:
-        print("🔥 ERROR EN /get_notes:", e)
-        return jsonify({'error': str(e)}), 500
+    return jsonify({
+        "authenticated": False
+    })
 
+@app.route('/get_notes')
+def get_notes():
+    if "user_id" not in session:
+        return jsonify({"error": "No autorizado"}), 401
+    user_id = session["user_id"]
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+    cur.execute("""
+
+        SELECT id,title,content,color,position
+
+        FROM notes
+
+        WHERE user_id=%s
+
+        ORDER BY position
+
+    """,(user_id,))
+    notes = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    return jsonify({"notes":notes})
 
 @app.route('/add_note', methods=['POST'])
 def add_note():
-    data = request.json
-    user_id = 1
+
+    if "user_id" not in session:
+        return jsonify({"error": "No autorizado"}), 401
+
+    data = request.get_json()
+
+    user_id = session["user_id"]
 
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-        INSERT INTO notes (user_id, title, content, color)
-        VALUES (%s, %s, %s, %s)
-    """, (user_id, data['title'], data['content'], data['color']))
+
+        INSERT INTO notes
+        (
+            user_id,
+            title,
+            content,
+            color
+        )
+        VALUES
+        (
+            %s,
+            %s,
+            %s,
+            %s
+        )
+
+    """, (
+
+        user_id,
+        data["title"],
+        data["content"],
+        data["color"]
+
+    ))
 
     conn.commit()
+
+    note_id = cur.lastrowid
+
     cur.close()
     conn.close()
 
-    return jsonify({'status': 'ok'})
+    return jsonify({
+        "status": "ok",
+        "id": note_id
+    })
+
+
+@app.route('/edit_note/<int:note_id>', methods=['PUT'])
+def edit_note(note_id):
+
+    if "user_id" not in session:
+        return jsonify({"error": "No autorizado"}), 401
+
+    data = request.get_json()
+
+    user_id = session["user_id"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+
+        UPDATE notes
+
+        SET
+
+            title=%s,
+            content=%s,
+            color=%s
+
+        WHERE
+
+            id=%s
+            AND user_id=%s
+
+    """, (
+
+        data["title"],
+        data["content"],
+        data["color"],
+        note_id,
+        user_id
+
+    ))
+
+    conn.commit()
+
+    actualizado = cur.rowcount
+
+    cur.close()
+    conn.close()
+
+    if actualizado == 0:
+
+        return jsonify({
+            "error": "La respuesta no existe."
+        }),404
+
+    return jsonify({
+        "status":"ok"
+    })
 
 @app.route('/delete_note/<int:note_id>', methods=['DELETE'])
 def delete_note(note_id):
-    user_id = 1
+
+    if "user_id" not in session:
+        return jsonify({"error": "No autorizado"}), 401
+
+    user_id = session["user_id"]
 
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
+
         DELETE FROM notes
-        WHERE id=%s AND user_id=%s
-    """, (note_id, user_id))
+
+        WHERE
+
+            id=%s
+            AND user_id=%s
+
+    """,(note_id,user_id))
 
     conn.commit()
+
+    eliminado = cur.rowcount
+
     cur.close()
     conn.close()
 
-    return jsonify({'status': 'ok'})
+    if eliminado == 0:
+
+        return jsonify({
+            "error":"La respuesta no existe."
+        }),404
+
+    return jsonify({
+        "status":"ok"
+    })
 
 @app.route('/update_positions', methods=['PATCH'])
 def update_positions():
-    data = request.json
-    user_id = 1
+
+    if "user_id" not in session:
+        return jsonify({"error":"No autorizado"}),401
+
+    data = request.get_json()
+
+    user_id = session["user_id"]
 
     conn = get_db_connection()
     cur = conn.cursor()
 
-    for p in data['positions']:
+    for posicion in data["positions"]:
+
         cur.execute("""
+
             UPDATE notes
+
             SET position=%s
-            WHERE id=%s AND user_id=%s
-        """, (p['position'], p['id'], user_id))
+
+            WHERE
+
+                id=%s
+                AND user_id=%s
+
+        """,(
+
+            posicion["position"],
+            posicion["id"],
+            user_id
+
+        ))
 
     conn.commit()
+
     cur.close()
     conn.close()
 
-    return jsonify({'status': 'ok'})
+    return jsonify({
+        "status":"ok"
+    })
 
 # Ejecutar la aplicación
 if __name__ == "__main__":

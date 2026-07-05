@@ -120,7 +120,7 @@ input::placeholder{
     outline: none;                     /* Eliminar el enfoque predeterminado del navegador*/
 }
 
-.volver{
+.btn_modal{
     height: 40px;
     width: 75px;
     background: #ec971f;
@@ -133,7 +133,7 @@ input::placeholder{
     font-size: 16px;
 }
 
-.volver:hover {
+.btn_modal:hover {
     box-shadow: inset 0 0 0 2px #ec971f;
 }
 

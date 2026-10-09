@@ -259,7 +259,7 @@ function descargarExcel(url, nombreArchivo) {
 const urlDelArchivo = 'C:\Users\Soporte\Documents\carpeta de prueba\Sandbox Teams\extensiones_teams.xlsx'; // URL del archivo Excel
 const nombreArchivo = 'extensiones_teams.xlsx'; // Nombre con el que quieres guardar el archivo
 
-descargarExcel(urlDelArchivo, nombreArchivo);
+//descargarExcel(urlDelArchivo, nombreArchivo);
 
 //---------------------------------------------------------------------------------
 

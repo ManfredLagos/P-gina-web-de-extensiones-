@@ -13,7 +13,11 @@ from flask_mysqldb import MySQL
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
+import time
 from datetime import timedelta
+from detector_pdf import analizar_pdf
+from ollama_client import consultar_ollama
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -23,6 +27,12 @@ app.permanent_session_lifetime = timedelta(days=30)
 
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'xls', 'xlsx'}
+
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+inicio_ollama = time.perf_counter()
 
 def get_db_connection():
     try:
@@ -1883,54 +1893,198 @@ def respuestas():
 def prueba():
     return render_template('prueba.html')
 
+@app.route('/chat_ia')
+def chat_ia():
+    return render_template('chat_ia.html')
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+
+    try:
+        texto = request.form.get("message", "").strip()
+        archivo = request.files.get("file")
+
+        # Validar que exista consulta o archivo
+        if not texto and not archivo:
+            return jsonify({
+                "success": False,
+                "error": "Debe ingresar una consulta o adjuntar un documento."
+            }), 400
+
+        tipo_documento = None
+        informacion_pdf = None
+
+        # ==========================================================
+        # PROCESAMIENTO DEL PDF
+        # ==========================================================
+
+        if archivo and archivo.filename:
+
+            if not archivo.filename.lower().endswith(".pdf"):
+                return jsonify({
+                    "success": False,
+                    "error": "Solo se permiten archivos PDF."
+                }), 400
+
+            nombre_archivo = secure_filename(
+                archivo.filename
+            )
+
+            ruta_pdf = os.path.join(
+                app.config["UPLOAD_FOLDER"],
+                nombre_archivo
+            )
+
+            archivo.save(ruta_pdf)
+
+            informacion_pdf = analizar_pdf(
+                ruta_pdf
+            )
+
+            tipo_documento = informacion_pdf["tipo"]
+
+        # ==========================================================
+        # MODELO FIJO
+        # ==========================================================
+
+        modelo = "soporte-cmw-q3-gemma3:latest"
+
+        # ==========================================================
+        # CONTEXTO DEL DOCUMENTO
+        # ==========================================================
+
+        contexto = ""
+
+        if informacion_pdf:
+
+            contexto = f"""
+Se ha adjuntado un documento PDF.
+
+Información del documento:
+
+- Tipo: {tipo_documento}
+- Páginas: {informacion_pdf['paginas']}
+- Páginas con texto: {informacion_pdf['paginas_con_texto']}
+- Páginas con imágenes: {informacion_pdf['paginas_con_imagenes']}
+- Cantidad de imágenes: {informacion_pdf['cantidad_imagenes']}
+- Caracteres de texto: {informacion_pdf['caracteres_texto']}
+
+El documento será procesado posteriormente para extraer
+su contenido completo.
+"""
+
+        # ==========================================================
+        # PROMPT
+        # ==========================================================
+
+        prompt = f"""
+Eres un asistente de soporte técnico especializado en
+telecomunicaciones, VoIP, central virtual, redes y atención
+de incidencias.
+
+Responde siempre en español.
+
+Tu objetivo es ayudar a resolver consultas técnicas de forma
+clara, precisa y profesional.
+
+No inventes información que no esté disponible.
+Si no tienes suficiente información para responder,
+indícalo claramente.
+
+Consulta del usuario:
+
+{texto}
+
+{contexto}
+"""
+
+        # ==========================================================
+        # CONSULTA A OLLAMA
+        # ==========================================================
+
+        inicio_ollama = time.perf_counter()
+
+        respuesta_ia = consultar_ollama(
+            modelo,
+            prompt
+        )
+
+        fin_ollama = time.perf_counter()
+
+        tiempo_ollama = fin_ollama - inicio_ollama
+
+        # ==========================================================
+        # RESPUESTA
+        # ==========================================================
+
+        return jsonify({
+
+            "success": True,
+            "response": respuesta_ia,
+            "model": modelo,
+            "ollama_time": round(tiempo_ollama, 2),
+            "document_type": tipo_documento,
+            "document_info": informacion_pdf
+
+        })
+
+    except Exception as e:
+
+        print("ERROR:", e)
+
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
 @app.route('/Genedador_contraseña')
 def Genedador_contraseña():
     return render_template('contraseña.html')
 
-@app.route("/check_session", methods=["POST"])
-def check_session():
-    data = request.get_json()
-    fingerprint = data.get("fingerprint")
-    ip = request.remote_addr
-    conn = get_db_connection()
-    cur = conn.cursor(dictionary=True)
-    cur.execute("""
-        SELECT
-            u.id,
-            u.nombre
-        FROM dispositivos d
-        INNER JOIN usuarios u
-            ON u.id = d.user_id
-        WHERE
-            d.ip=%s
-            AND d.fingerprint=%s
-    """, (ip, fingerprint))
-    usuario = cur.fetchone()
-
-    if usuario:
-        session["user_id"] = usuario["id"]
-        session["nombre"] = usuario["nombre"]
-        cur.execute("""
-            UPDATE dispositivos
-            SET
-                ultimo_uso = NOW()
-            WHERE
-                ip=%s
-                AND fingerprint=%s
-        """, (ip, fingerprint))
-        conn.commit()
-        cur.close()
-        conn.close()
-        return jsonify({
-            "authenticated": True
-        })
-
-    cur.close()
-    conn.close()
-
-    return jsonify({
-        "authenticated": False
-    })
+#@app.route("/check_session", methods=["POST"])
+#def check_session():
+#    data = request.get_json()
+#    fingerprint = data.get("fingerprint")
+#    ip = request.remote_addr
+#    conn = get_db_connection()
+#    cur = conn.cursor(dictionary=True)
+#    cur.execute("""
+#        SELECT
+#            u.id,
+#            u.nombre
+#        FROM dispositivos d
+#        INNER JOIN usuarios u
+#            ON u.id = d.user_id
+#        WHERE
+#            d.ip=%s
+#            AND d.fingerprint=%s
+#    """, (ip, fingerprint))
+#    usuario = cur.fetchone()#
+#
+#    if usuario:
+#        session["user_id"] = usuario["id"]
+#        session["nombre"] = usuario["nombre"]
+#        cur.execute("""
+#            UPDATE dispositivos
+#            SET
+#                ultimo_uso = NOW()
+#            WHERE
+#                ip=%s
+#                AND fingerprint=%s
+#        """, (ip, fingerprint))
+#        conn.commit()
+#        cur.close()
+#        conn.close()
+#        return jsonify({
+#            "authenticated": True
+#        })
+#
+#    cur.close()
+#    conn.close()
+#
+#    return jsonify({
+#        "authenticated": False
+#    })
 
 @app.route('/get_notes')
 def get_notes():
@@ -1940,16 +2094,9 @@ def get_notes():
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("""
-
-        SELECT id,title,content,color,position
-
-        FROM notes
-
-        WHERE user_id=%s
-
-        ORDER BY position
-
-    """,(user_id,))
+        SELECT id,title,content,color,position FROM notes WHERE user_id=%s ORDER BY position
+    """,
+    (user_id,))
     notes = cur.fetchall()
     cur.close()
     conn.close()
@@ -1963,31 +2110,13 @@ def add_note():
         return jsonify({"error": "No autorizado"}), 401
 
     data = request.get_json()
-
     user_id = session["user_id"]
-
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-
-        INSERT INTO notes
-        (
-            user_id,
-            title,
-            content,
-            color
-        )
-        VALUES
-        (
-            %s,
-            %s,
-            %s,
-            %s
-        )
-
+        INSERT INTO notes (user_id, title, content, color) VALUES (%s, %s, %s, %s)
     """, (
-
         user_id,
         data["title"],
         data["content"],
@@ -1996,9 +2125,7 @@ def add_note():
     ))
 
     conn.commit()
-
     note_id = cur.lastrowid
-
     cur.close()
     conn.close()
 
@@ -2010,32 +2137,16 @@ def add_note():
 
 @app.route('/edit_note/<int:note_id>', methods=['PUT'])
 def edit_note(note_id):
-
     if "user_id" not in session:
         return jsonify({"error": "No autorizado"}), 401
 
     data = request.get_json()
-
     user_id = session["user_id"]
-
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-
-        UPDATE notes
-
-        SET
-
-            title=%s,
-            content=%s,
-            color=%s
-
-        WHERE
-
-            id=%s
-            AND user_id=%s
-
+        UPDATE notes SET title=%s, content=%s, color=%s WHERE id=%s AND user_id=%s
     """, (
 
         data["title"],
@@ -2047,53 +2158,37 @@ def edit_note(note_id):
     ))
 
     conn.commit()
-
     actualizado = cur.rowcount
-
     cur.close()
     conn.close()
 
     if actualizado == 0:
-
         return jsonify({
             "error": "La respuesta no existe."
         }),404
-
     return jsonify({
         "status":"ok"
     })
 
 @app.route('/delete_note/<int:note_id>', methods=['DELETE'])
 def delete_note(note_id):
-
     if "user_id" not in session:
         return jsonify({"error": "No autorizado"}), 401
 
     user_id = session["user_id"]
-
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-
-        DELETE FROM notes
-
-        WHERE
-
-            id=%s
-            AND user_id=%s
-
+        DELETE FROM notes WHERE id=%s AND user_id=%s
     """,(note_id,user_id))
 
     conn.commit()
-
     eliminado = cur.rowcount
-
     cur.close()
     conn.close()
 
     if eliminado == 0:
-
         return jsonify({
             "error":"La respuesta no existe."
         }),404
@@ -2104,40 +2199,25 @@ def delete_note(note_id):
 
 @app.route('/update_positions', methods=['PATCH'])
 def update_positions():
-
     if "user_id" not in session:
         return jsonify({"error":"No autorizado"}),401
 
     data = request.get_json()
-
     user_id = session["user_id"]
-
     conn = get_db_connection()
     cur = conn.cursor()
 
     for posicion in data["positions"]:
 
         cur.execute("""
-
-            UPDATE notes
-
-            SET position=%s
-
-            WHERE
-
-                id=%s
-                AND user_id=%s
-
+            UPDATE notes SET position=%s WHERE id=%s AND user_id=%s
         """,(
-
             posicion["position"],
             posicion["id"],
             user_id
-
         ))
 
     conn.commit()
-
     cur.close()
     conn.close()
 

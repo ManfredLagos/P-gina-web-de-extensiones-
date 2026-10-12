@@ -9,6 +9,128 @@
     <script src="{{ url_for('static', filename='funciones/fingerprint.min.js') }}"></script>
     <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
 </head>
+<style>
+    .chat_bot{
+   background: #9dc010;
+   padding: 10px;
+   margin: 20px;
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;cursor: pointer;
+   box-shadow: 2px 2px 2px 2px rgba(171, 209, 17, 0.27);
+
+}
+
+.chat_bot:hover{
+   background: #abd111;
+}
+
+.asistente_virtual{
+   display: flex;
+   flex-direction: column;
+   margin: 20px;
+   width: 300px;
+   height: 400px;
+   border: #9dc010 solid 3px;
+   border-radius: 10px;
+   box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);
+   align-items: center;
+}
+
+.message-input{
+   display: flex;
+   flex-direction: row;
+}
+
+.message-send {
+   width: 28px;
+   height: 28px;
+   background-color: transparent;
+   cursor: pointer; /* Añadimos el cursor de apuntador para indicar que el botón es clickeable */
+   align-self: flex-end;
+   display: flex;
+   justify-content: center; /* Centra la imagen horizontalmente */
+   align-items: center; /* Centra la imagen verticalmente */
+   border-radius: 5px;
+}
+
+.message-send:hover{
+   background: #a1a1a1;
+}
+
+.boton_archivo{
+   display: flex;
+   width: 22px;
+   height: 22px;
+   padding: 3px;
+   margin: 3px;
+   cursor: pointer;
+   background-color: transparent;
+   justify-content: center; /* Centra la imagen horizontalmente */
+   align-items: center; /* Centra la imagen verticalmente */
+   margin-top: 10px;
+   border-radius: 5px;
+   /*flexbox: ;*/
+}
+
+.boton_archivo:hover{
+   background: #a1a1a1;
+}
+
+.textarea_chatbot{
+   margin-top: 8px;
+   border-radius: 5px;
+   border: none;
+   width: 75%;
+   font-size: 16px;
+   padding: 5px 5px 0 5px;
+   outline: none;
+   resize: none;
+
+}
+
+
+/*chat box*/
+
+.chatbox {
+   background: #ffffff;
+   overflow-y: auto; /* Agrega desplazamiento vertical si el contenido supera la altura */
+   margin: 0;
+   padding: 0;
+}
+
+.chatbox .chat {
+   display: flex;
+   background: #ffffff;
+
+}
+       
+.chatbox .chat p {
+   color: rgb(255, 255, 255);
+   font-size: 0.95rem;
+   padding: 12px 16px;
+   border-radius: 10px 10px 0px 10px;
+   background: rgb(228, 222, 222);
+}
+
+.chatbox .incoming {
+   padding: 0 50px 5px 3px;
+}
+       
+.chatbox .incoming p {
+   color: white;
+   border-radius: 10px 10px 10px 0px;
+   background: #337ab7;
+       
+}
+        
+.chatbox .outgoing {
+   margin: 8px 0;
+   justify-content: flex-end; 
+   padding: 0 10px 0 0;   
+   top: 0%;        
+}
+</style>
 <body class="contenedor">
     <header class="cabeza">
         
@@ -32,6 +154,49 @@
     </nav>
     <main class="cuerpo">
         {% block content %}{% endblock %}
+        <div style="display: flex; justify-content: end; position: absolute; z-index: 1000; bottom: 0; right: 30px;">
+            <div id="chat_bot" class="chat_bot" style="display: block;">
+                <img class="imgbot" src="{{ url_for('static', filename='imagenes/bot blanco.png') }}" alt="Bot">
+            </div>
+            <div style="display: none;" id="asistente_virtual">
+                <div class="asistente_virtual">
+                    <div class="seccion_chat">
+
+                        <div class="titulo_chat">
+                            <div style="padding: 0; margin: 0; width: 100%; text-align: center;">
+                                <h4 style="background: #9dc010; color: #ffffff; padding: 5px 0; margin: 0; border-radius: 6px 6px 0 0 ;">Asistente Virtual</h4>
+                                <button id="cerrar_asistentevirtual" style="position: absolute; top: 0; right: 0;"><img class="imgcerrar" src="{{ url_for('static', filename='imagenes/flecha_hacia_abajo.png') }}" alt="Imagen Cerrar"></button>
+                            </div>
+                        </div>
+
+                        <div class="imagen_chat">
+                            <div style="padding: 5px 0; align-items: center; display: flex; justify-content: center;">
+                                <div><img class="imgcallmyway_asistentevirtual" src="{{ url_for('static', filename='imagenes/Captura_de_pantalla_2024-08-24_110935-removebg-preview.png') }}" alt="CallMyWay Logo"></div>
+                            </div>
+                        </div>
+                        <div class="cuerpo_chat">
+                            <ul class="chatbox" id="chatboxid">
+                                <li class="chat incoming"><p>¡Hola! Estoy aquí para ayudarte. ¿En qué puedo asistirte hoy?</p></li>
+                            </ul>
+                        </div>
+                        <div class="mensaje_chat">
+                            <div>
+                                <div id="file-upload" class="message-input">
+                                    <div id="boton_archivo" class="boton_archivo">
+                                        <input type="file" accept="images/*" id="file-input" hidden>
+                                        <img class="imgarchivo" src="{{ url_for('static', filename='imagenes/enviar_archivo.png') }}" alt="Archivo">
+                                    </div>
+                                    <textarea class="textarea_chatbot" id="user-message" placeholder=" Escribe un mensaje" rows="1" required></textarea>
+                                    <span class="message-send" id="send-btn" onclick="sendMessage()">
+                                        <img class="imgenviar" src="{{ url_for('static', filename='imagenes/enviar-mensaje.png') }}" alt="Enviar">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <footer class="pie1">
         <div class="modal_contenedor" id="mensaje">
@@ -82,3 +247,31 @@
     <div class="pie3" style="display: none;"></div>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('chat_bot').addEventListener('click', function() {
+            // Ocultar chat_bot
+            document.getElementById('chat_bot').style.display = 'none';
+            // Mostrar asistente_virtual
+            document.getElementById('asistente_virtual').style.display = 'block';
+        });
+    
+        document.getElementById('cerrar_asistentevirtual').addEventListener('click', function() {
+            // Ocultar asistente_virtual
+            document.getElementById('asistente_virtual').style.display = 'none';
+            // Mostrar chat_bot
+            document.getElementById('chat_bot').style.display = 'block';
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('file-input');
+        const fileUploadButton = document.getElementById('boton_archivo');
+
+        // Asegúrate de que el evento esté correctamente enlazado
+        fileUploadButton.addEventListener('click', function () {
+            fileInput.click();
+        });
+    });
+    </script>

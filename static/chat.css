@@ -1,0 +1,37 @@
+.seccion_chat{
+    background: #ffffff;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template: 
+    "titulo_chat" 30px
+    "imagen_chat" 60px
+    "cuerpo_chat" auto
+    "mensaje_chat" 50px
+    ;
+    border-radius: 10px;
+}
+
+.titulo_chat{
+    grid-area: titulo_chat;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.imagen_chat{
+    grid-area: imagen_chat;
+    display: flex;
+    justify-content: center; /* Centra la imagen horizontalmente */
+    align-items: center; /* Centra la imagen verticalmente */
+}
+
+.cuerpo_chat{
+    grid-area: cuerpo_chat;
+    border-top: #bbbbbb solid 2px;
+    border-bottom: #337ab7 solid 2px;
+}
+
+.mensaje_chat{
+    grid-area: mensaje_chat;
+}

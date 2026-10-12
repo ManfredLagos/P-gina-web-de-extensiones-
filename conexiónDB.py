@@ -1947,7 +1947,7 @@ def api_chat():
         # MODELO FIJO
         # ==========================================================
 
-        modelo = "soporte-cmw-q3-gemma3:latest"
+        modelo = "llama3.2"
 
         # ==========================================================
         # CONTEXTO DEL DOCUMENTO
@@ -1978,18 +1978,8 @@ su contenido completo.
         # ==========================================================
 
         prompt = f"""
-Eres un asistente de soporte técnico especializado en
-telecomunicaciones, VoIP, central virtual, redes y atención
-de incidencias.
 
 Responde siempre en español.
-
-Tu objetivo es ayudar a resolver consultas técnicas de forma
-clara, precisa y profesional.
-
-No inventes información que no esté disponible.
-Si no tienes suficiente información para responder,
-indícalo claramente.
 
 Consulta del usuario:
 
@@ -2227,4 +2217,4 @@ def update_positions():
 
 # Ejecutar la aplicación
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=8000)

@@ -213,35 +213,15 @@ function regenerarPassword(button){
     input.value = reGeneratePassword();
 }
 
-function copy(button) {
- 
-    const upper = upperEl.checked;
-    const lower = lowerEl.checked;
-    const numbers = numbersEl.checked;
-    const symbols = symbolsEl.checked;
+function copy() {
 
-    let chars = "";
+    const copiar = querySelector("img");
+    const check = querySelector(".icon-check");
 
-    if (upper) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if (lower) chars += "abcdefghijklmnopqrstuvwxyz";
-    if (numbers) chars += "0123456789";
-    if (symbols) chars += "!@#$%&_";
-
-    if (chars.length === 0) {
-        document.getElementById('error_caracter').style.display = 'block';
-        document.getElementById('shadow').style.display = 'block';
-        return;
-    }
-
-    const fila = button.closest(".resultados_contraseñas");
-
+    /*const fila = button.closest(".resultados_contraseñas");
     const input = fila.querySelector("input");
 
-    navigator.clipboard.writeText(input.value);
-
-    const copiar = button.querySelector("img");
-
-    const check = fila.querySelector(".icon-check");
+    navigator.clipboard.writeText(input.value);*/
 
     copiar.style.visibility = "hidden";
     check.style.visibility = "visible";
@@ -263,7 +243,7 @@ function agregarDivsPass(results) {
         div.classList.add('resultados_contraseñas');
         div.innerHTML = `
             <input type="text" id="output${i + 1}" value="${results[i]}" readonly>
-            <button class="icon-btn" onclick="copy(this)"><img class="icon-img" src="/static/imagenes/copiar_blanco.png" alt="Copiar"></button>
+            <button class="icon-btn" onclick="copy()"><img class="icon-img" src="/static/imagenes/copiar_blanco.png" alt="Copiar"></button>
             <img class="icon-check" src="/static/imagenes/check_blanco.png" alt="Confirmación">
             <button class="icon-btn" onclick="regenerarPassword(this)"><img class="icon-img" src="/static/imagenes/recargar.png" alt="Actualizar"></button>
         `;

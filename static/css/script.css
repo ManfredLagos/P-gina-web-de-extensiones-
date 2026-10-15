@@ -1,0 +1,100 @@
+.seccion_script {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%; /* Dos columnas que ocupan el 50% del ancho */
+    grid-template-rows: 90px auto 100px; /* Filas con alturas específicas */
+    grid-template-areas: 
+        "titulo_script titulo_politicas" /* Primera fila con los títulos */
+        "sec_script sec_politicas"       /* Segunda fila con las secciones */
+        "generar generar";               /* Tercera fila con el botón generar */
+}
+
+.sec_script {
+    grid-area: sec_script;
+}
+
+.sec_politicas {
+    grid-area: sec_politicas;
+    color: rgb(151, 151, 151);
+}
+
+.generar {
+    grid-area: generar;
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;  
+}
+
+.titulo_script{
+    grid-area: titulo_script;
+}
+
+.titulo_politicas{
+    grid-area: titulo_politicas;
+}
+
+.contenedor_script{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 10px 10px 10px 60px ;
+    gap: 10px; 
+}
+
+.input.extension {
+    width: 125px; /* Ancho fijo para los botones */
+}
+
+.input.correo {
+    width: 300px; /* Ancho fijo para los botones */
+}
+
+.class_box{
+    display: flex;
+    margin: 0 30 0 40;
+    padding: 0;
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+
+}
+
+.class_box p {
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 700;
+
+}
+
+#politicas{
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+    font-weight: 700;
+
+}
+
+#politicas_alta{
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+
+}
+
+#politicas_baja{
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+
+}
+
+.input.numero {
+    width: 300px; /* Ancho fijo para los botones */
+    display: none;
+}
+
+.extension_alta {
+    margin: 5px 0;
+    
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Scripts</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}">
     <link id="logo" rel="icon" href="{{ url_for('static', filename='imagenes/titulo.ico') }}" type="image/ico">
     <script src="{{ url_for('static', filename='funciones/fingerprint.min.js') }}"></script>
     <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
@@ -145,16 +145,16 @@
     <nav class="linea2">   
         <div>
             <a href="/"><button class="inicio" aria-label="Inicio">Inicio</button></a>
-            <a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>
+             <!--<a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>-->
             <a href="/respuestas"><button class="respuestas" aria-label="Respuestas">Respuestas</button></a>
             <a href="/prueba"><button class="respuestas" aria-label="Inicio">Prueba</button></a>
-            <a href="/Genedador_contraseña"><button class="respuestas" aria-label="Inicio">Contraseñas</button></a>
+            <a href="/Genedador_contraseña"><button class="respuestas" aria-label="Inicio" style="width: 90px;">Contraseñas</button></a>
             <a href="/chat_ia"><button class="respuestas" aria-label="Inicio">Chatbot</button></a>
         </div>
     </nav>
     <main class="cuerpo">
         {% block content %}{% endblock %}
-        <div style="display: flex; justify-content: end; position: absolute; z-index: 1000; bottom: 0; right: 30px;">
+        <!--<div style="display: flex; justify-content: end; position: absolute; z-index: 1000; bottom: 0; right: 30px;">
             <div id="chat_bot" class="chat_bot" style="display: block;">
                 <img class="imgbot" src="{{ url_for('static', filename='imagenes/bot blanco.png') }}" alt="Bot">
             </div>
@@ -196,7 +196,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </main>
     <footer class="pie1">
         <div class="modal_contenedor" id="mensaje">

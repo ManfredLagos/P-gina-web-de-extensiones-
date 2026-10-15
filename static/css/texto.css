@@ -1,0 +1,90 @@
+.seccion_texto{
+    height: 100%;
+    display: grid;
+    grid-template: 
+    "titulo_texto" 90px
+    "cuerpo_texto" auto
+    "nuevo_script" 100px
+    ;
+}
+
+.titulo_texto{
+    grid-area: titulo_texto;
+}
+
+.cuerpo_texto{
+    grid-area: cuerpo_texto;
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;   /* Centrar verticalmente */
+}
+
+.nuevo_script{
+    grid-area: nuevo_script;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;
+    padding: 15px 0 0 0;
+}
+
+.container {
+    background-color: #ffffff;
+    color: rgb(138, 138, 138);
+    width: 760px; /* Ancho fijo para los botones */
+    height: 250px; /* Alto fijo para los botones */
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, .57);
+    border-radius: 10px;
+    border-color: rgb(187, 187, 187);
+    resize: none;
+    border-width: 3px;
+    border-style: solid;
+    
+}
+
+.textoh5 {
+    margin: 0 100px;
+    text-align: left;
+    font-size: 12px;
+    gap: 3px;
+}
+
+.texto2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    padding: 5px 10px 15px 25px;
+    gap: 10px;
+    color: rgb(138, 138, 138);
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgb(187, 187, 187);
+    border-radius: 15px;
+    box-shadow: 6px 6px 6px rgba(0, 0, 0, .57);
+    height: 85%;
+    width: 60%;
+}
+
+/* Esta clase se usa para agrupar los h5 que deben estar en la misma línea */
+.fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+h5{
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+}
+
+#copiar_texto{
+    font-size: calc(12px + (7.5 * ((100vh - 645px) / (1000 - 645))));
+    text-align: left;
+    line-height: 1.0;
+    font-weight: 600;
+}
+
+.saludo{
+    font-size: calc(12px + (7 * ((100vh - 645px) / (1000 - 645))));
+    text-align: left;
+    line-height: 1.0;
+}

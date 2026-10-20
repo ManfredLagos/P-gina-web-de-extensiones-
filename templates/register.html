@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <form method="POST" action="/Registrar">
+        <div class="form-group">
+            <input type="email" id="email" name="email" placeholder="Ingrese su correo electrónico" required>
+        </div>
+        <div class="password-container"> 
+            <input type="password" id="pin" name="pin" placeholder="Ingrese su pin" required>
+            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                <i class="fa fa-eye"></i>
+            </span>
+        </div>
+        <div class="password-container"> 
+            <input type="password" id="confirm_pin" name="confirm_pin" placeholder="Confirme su Pin" required>
+            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                <i class="fa fa-eye"></i>
+            </span>
+        </div>
+        <div class="form-group">
+            <button type="submit">Registrar Usuario</button>
+        </div>
+    </form>
+    <div class="form-group">
+        <a href="/"><button type="submit">Volver</button></a>
+    </div>
+</div>
+{% endblock %}

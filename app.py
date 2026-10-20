@@ -10,6 +10,7 @@ from datetime import timedelta
 from detector_pdf import analizar_pdf
 from ollama_client import consultar_ollama
 from werkzeug.utils import secure_filename
+from codigo import generar_codigo_verificacion, enviar_correo_verificacion
 
 app = Flask(__name__)
 
@@ -37,9 +38,13 @@ def get_db_connection():
         auth_plugin='mysql_native_password'
     )
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    return render_template('index.html')
+@app.route('/Generador_Script', methods=['GET', 'POST'])
+def Generador_Script():
+    if 'email' in session:
+        return render_template('generador_script.html')
+        
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/script_alta', methods=['GET', 'POST'])
 def script_alta():
@@ -984,7 +989,7 @@ def update_positions():
 
 #-------------------------------------  chat ia  ----------------------------------------
 
-@app.route('/chat_ia')
+@app.route('/Chat_IA')
 def chat_ia():
     return render_template('chat_ia.html')
 
@@ -1050,7 +1055,6 @@ Información del documento:
 El documento será procesado posteriormente para extraer
 su contenido completo.
 """
-
         prompt = f"""
 
 Responde siempre en español.
@@ -1061,7 +1065,6 @@ Consulta del usuario:
 
 {contexto}
 """
-
         inicio_ollama = time.perf_counter()
 
         respuesta_ia = consultar_ollama(
@@ -1092,6 +1095,142 @@ Consulta del usuario:
             "success": False,
             "error": str(e)
         }), 500
+
+#-------------------------------------  inicio de sesión  ----------------------------------------
+
+@app.route('/')
+def index():
+    error_message = session.pop('error_message', None)
+    email = session.get('email', None)
+    return render_template('index.html', error_message=error_message, email=email)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        pin = request.form['pin']
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        if user:
+            if user[2] == pin:
+                session['email'] = user[1]
+                return redirect('/Generador_Script')
+            else:
+                error_message = "Las credenciales ingresadas son incorrectas. Por favor, verifica tu correo electrónico y contraseña e inténtalo nuevamente."
+                session['error_message'] = {'text': error_message}
+                session['email'] = email  # Mantener el correo ingresado en la sesión
+                return redirect(url_for('index'))
+
+        else:
+            error_message = "La cuenta ingresada no está registrada. Por favor, asegúrate de haber ingresado correctamente tus credenciales o crea una cuenta nueva."
+            session['error_message'] = {'text': error_message, 'text_color': text_color,
+                                        'font_weight': font_weight}
+            return redirect(url_for('index'))
+
+    return render_template('index.html')
+
+
+@app.route('/Registrar', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        pin = request.form.get('pin')
+        confirm_pin = request.form.get('confirm_pin')
+
+        if pin != confirm_pin:
+            error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
+            return render_template('/Registrar', error_message=error_message, pin=pin)
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO users (email, pin) VALUES (%s, %s)",
+            (email, pin))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return redirect('/')
+
+    return render_template('register.html')
+
+
+@app.route('/Olvidé_mi_contraseña', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        code = generar_codigo_verificacion()
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO new_pin (email, code) VALUES (%s, %s)", (email, code))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        enviar_correo_verificacion(email, code)
+
+        session['email'] = email
+        session['code'] = code
+
+        return redirect(url_for('reset_password'))
+
+    return render_template('forgot_password.html')
+
+@app.route('/Regenerar_Contraseña', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        code = request.form.get('code')
+        new_pin = request.form.get('new_pin')
+        confirm_pin = request.form.get('confirm_pin')
+
+        if new_pin != confirm_pin:
+            error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
+            return render_template('reset_password.html', error_message=error_message, code=code)
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM new_pin WHERE code = %s", (code,))
+        password_data = cur.fetchone()
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        if password_data:
+            email = password_data[0]
+            new_pin = request.form.get('new_pin')
+
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("UPDATE users SET pin = %s WHERE email= %s", (new_pin, email))
+            cur.execute("DELETE FROM new_pin WHERE code = %s", (code,))
+            conn.commit()
+            cur.close()
+            conn.close()
+
+            return redirect(url_for('index'))
+
+        elif 'resend_pin' in request.form:
+            code = session.get('code')
+            email = session.get('email')
+            enviar_correo_verificacion(email, code)
+            session.pop('email', None)
+            session.pop('code', None)
+
+            return render_template('reset_password.html', email=email, pin=code)
+
+        else:
+            error_message = "El código es incorrecto. Por favor, verifica el código e inténtalo de nuevo."
+            return render_template('reset_password.html', error_message=error_message, pin_error=True)
+
+    return render_template('reset_password.html')
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8000)

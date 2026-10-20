@@ -92,7 +92,7 @@
 .input {
     background-color: #ffffff;
     color: #747474;
-    width: 200px; /* Ancho fijo para los botones */
+    width: 225px; /* Ancho fijo para los botones */
     height: 55px; /* Alto fijo para los botones */
     font-weight: 700;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);

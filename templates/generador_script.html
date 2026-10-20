@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="contenedorcuerpo">
+    <div class="seccion_inicio">
+        <div class="titulo">
+            <div class="bienvenido">
+                <h1>Bienvenido a ScriptMaster</h1>
+            </div>
+        </div>
+        <!-- Botón Alta -->
+        <div class="button_alta">
+            <button class="button" onclick="mostrarInput('alta')">Alta</button>
+            <div id="alta" class="input-container" style="visibility:hidden;">
+                <input name="alta" class="input" type="text" placeholder="Cantidad Alta">
+            </div>
+        </div>
+        <!-- Botón Baja -->
+        <div class="button_baja">
+            <button class="button" onclick="mostrarInput('baja')">Baja</button>
+            <div id="baja" class="input-container" style="visibility:hidden;">
+                <input name="baja" class="input" type="text" placeholder="Cantidad Baja">
+            </div>
+        </div>
+        <!-- Botón Alta y Baja -->
+        <div class="button_altaybaja">
+            <button class="button" onclick="mostrarInput('altaybaja')">Alta y Baja</button>
+            <div id="altaybaja" class="input-container" style="visibility:hidden;">
+                <input name="aa" class="input" type="text" placeholder="Cantidad Alta">
+                <input name="bb" class="input" type="text" placeholder="Cantidad Baja">
+            </div>
+        </div>
+        <!-- Continuar -->
+        <div class="continuar">
+            <a id="continuar" href="#" style="display: flex; text-decoration: none;">
+                <button id="continuar" class="button" onclick="continuar()">Continuar</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+//******************** Función para ocultar y mostrar los inputs de alta, baja o alta y baja *********************
+function mostrarInput(input) {
+    // Obtiene los elementos por su ID
+    var alta = document.getElementById("alta");
+    var baja = document.getElementById("baja");
+    var altaybaja = document.getElementById("altaybaja");
+
+    // Lógica para alternar la visibilidad de la sección 'alta'
+    if (input === 'alta') {
+        if (alta.style.visibility === "visible") { // Si 'alta' ya está visible, lo ocultamos
+            alta.style.visibility = "hidden";
+            limpiarInputs(alta); 
+        } else {  // Si 'alta' no está visible, lo mostramos y ocultamos las demás secciones
+            alta.style.visibility = "visible";
+            baja.style.visibility = "hidden";
+            altaybaja.style.visibility = "hidden";
+            limpiarInputs(baja); // Limpiar los inputs de las secciones no visibles
+            limpiarInputs(altaybaja);
+        }
+
+    } else if (input === 'baja') {
+        if (baja.style.visibility === "visible") {
+            baja.style.visibility = "hidden";
+            limpiarInputs(baja);
+        } else{
+            baja.style.visibility = "visible";  // Muestra el formulario de baja
+            alta.style.visibility = "hidden"; 
+            altaybaja.style.visibility = "hidden"; 
+            limpiarInputs(alta);               // Limpia los inputs de alta
+            limpiarInputs(altaybaja);          // Limpia los inputs de alta y baja
+        }
+
+    } else if (input === 'altaybaja') {
+        if (altaybaja.style.visibility === "visible"){
+            altaybaja.style.visibility = "hidden";
+            limpiarInputs(altaybaja);
+        } else{
+            altaybaja.style.visibility = "visible"; // Muestra el formulario de alta y baja
+            alta.style.visibility = "hidden"; 
+            baja.style.visibility = "hidden"; 
+            limpiarInputs(alta);                // Limpia los inputs de alta
+            limpiarInputs(baja);                // Limpia los inputs de baja
+        }
+    }
+}
+
+// Función para limpiar los inputs de una sección específica
+function limpiarInputs(section) {
+    var inputs = section.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = "";  // Limpia el valor de cada input
+    }
+}
+//************************************************** Fin de la función *************************************************
+
+
+//********************* Función para manejar la acción de "Continuar" *************************************************//
+function continuar() {
+    // Obtener las cantidades de los inputs
+    const alta = document.querySelector('input[name="alta"]').value;
+    const baja = document.querySelector('input[name="baja"]').value;
+    const aa = document.querySelector('input[name="aa"]').value;
+    const bb = document.querySelector('input[name="bb"]').value;
+
+    // Almacenar en localStorage según lo ingresado
+    if (alta) localStorage.setItem('alta', alta);
+    if (baja) localStorage.setItem('baja', baja);
+    if (aa) localStorage.setItem('aa', aa);
+    if (bb) localStorage.setItem('bb', bb);
+
+    // Redirigir según los datos ingresados
+    if (alta > 0 || baja > 0) {
+        if (alta > 0) {
+            // Redirigir a la página de "script_alta" si se ingresó un valor en "alta"
+            window.location.href = '/script_alta';  
+        } else if (baja > 0) {
+            // Redirigir a la página de "script_baja" si se ingresó un valor en "baja"
+            window.location.href = '/script_baja';  
+        }
+    } else if (aa > 0 && bb > 0) {
+        // Redirigir a la página de "script_altaybaja" si se ingresaron valores en ambos "aa" y "bb"
+        window.location.href = '/script_altaybaja';  
+    } else {
+        // Si no se ingresaron datos válidos, mostrar un mensaje de error
+        document.getElementById('mensaje').style.display = 'block';
+        document.getElementById('shadow').style.display = 'block';
+    }
+}
+;
+//************************************************** Fin de la función *************************************************
+
+</script>
+
+{% endblock %}
+
+
+
+

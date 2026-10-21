@@ -5,6 +5,7 @@
     flex-direction: row; 
     align-items: center;    /* Centra horizontalmente */
     justify-content: center; /* Centra verticalmente si es necesario */
+    margin-top: 30px;
 
 }
 
@@ -36,6 +37,7 @@ html {
    display: flex;
    background-color: rgb(255, 255, 255);
    justify-content: space-between;
+   padding: 0 100px;
 }
 
 .linea1_inicio{
@@ -46,6 +48,10 @@ html {
 .linea2_inicio{
    grid-area: linea2;
    background: linear-gradient(to bottom, #1B75D1, #053178);
+   padding: 0 100px;
+   justify-content: space-between;
+   display: flex;
+   flex-direction: row;
 }
 
 .cuerpo_inicio{
@@ -55,6 +61,7 @@ html {
    position: relative;
    display: flex;
    flex-direction: column;
+   padding: 0 100px;
 }
 
 .pie1_inicio{
@@ -74,7 +81,7 @@ html {
 }
 
 .contenedorcuerpo {
-      align-items: center;
+   align-items: center;
 }
 
 .seccion_inicio{
@@ -91,13 +98,12 @@ html {
     height: 64.5px;
     width: 292px;
     left: 0;
-    margin: 1.4px 10px 1px 40px;
+    margin: 1.4px 10px 1px 0;
 }
 
 .inicio_sesion{
    display: flex;
    flex-direction: row;
-   background-color: aqua;
    height: 100%;
    width: 100%;
    justify-content: center;
@@ -108,18 +114,48 @@ html {
 
 .inicio_sesion input{
    height: 20px;
-   border: none;
+   border: solid 1px #afafaf;
    padding: 10px;
-   border-radius: 10px;
+   border-radius: 7px;
+   /*background-color: rgb(232, 240, 254);*/
+}
+
+.inicio_sesion input::placeholder{
+    color: #afafaf;
+}
+
+.inicio_sesion input:focus {
+    border-color: rgb(102, 175, 233);
+    box-shadow: 2px 2px 2px #85bfed;
+    outline: none;                     /* Eliminar el enfoque predeterminado del navegador*/
 }
 
 .inicio_sesion button{
    height: 38px;
    width: 38px;
    border: none;
-   border-radius: 10px;
-   background-color: #053178;
+   border-radius: 7px;
+   background-color: #337ab7;
 }
+
+.enlace_linea{
+   padding: 0 30px;
+}
+
+.enlace_linea button{
+   height: 25px;
+   background: #E8780A;
+   border: solid 1px #E8780A;
+   border-radius: 0 0 5px 5px;
+   margin: 0 0 0 5px;
+}
+
+.enlace_linea a{
+   text-decoration: none;
+   color: #fff;
+   font-size: 13px;
+}
+
 
 @media (min-height: 645px) {
    .contenedor {

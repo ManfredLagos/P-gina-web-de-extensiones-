@@ -22,7 +22,7 @@
                         <!-- Utilizamos el ícono de "ojo" de Font Awesome -->
                         <i class="fa fa-eye"></i>
                 </div>
-                <button type="submit"><img src="{{ url_for('static', filename='imagenes/play.png') }}" alt="Botón de play" style="height: 15px; width: 15px;"></button>
+                <button type="submit"><img src="{{ url_for('static', filename='imagenes/play.png') }}" alt="Botón de play" style="height: 12px; width: 12px;"></button>
             </div>
         </form>
     </header>
@@ -31,10 +31,9 @@
         <div>
              <!--<a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>-->
         </div>
-        <div>
-            <a href="/Registrar">Registrarse</a>
-            <a href="/Olvidé_mi_contraseña">Olvidé mi contraseña</a>
-
+        <div class="enlace_linea">
+            <button><a href="/Registrar">Registrarse</a></button>
+            <button><a href="/Olvidé_mi_contraseña">Olvidé mi contraseña</a></button>
         </div>
     </nav>
     <main class="cuerpo_inicio">

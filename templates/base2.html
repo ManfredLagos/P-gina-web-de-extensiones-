@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Scripts</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}">
+    <link id="logo" rel="icon" href="{{ url_for('static', filename='imagenes/titulo.ico') }}" type="image/ico">
+    <script src="{{ url_for('static', filename='funciones/fingerprint.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
+</head>
+
+<body class="contenedor">
+    <header class="cabeza">
+        
+        <div>
+            <img class="imgcallmyway" src="{{ url_for('static', filename='imagenes/Captura_de_pantalla_2024-08-24_110935-removebg-preview.png') }}" alt="CallMyWay Logo">
+        </div>
+        <div>
+            <img class="imgteams" src="{{ url_for('static', filename='imagenes/image-removebg-preview.png') }}" alt="Teams Logo">
+        </div>
+    </header>
+    <nav class="linea1"></nav>
+    <nav class="linea2">
+        <a href="/"><button class="respuestas" aria-label="Inicio">Inicio</button></a>   
+    </nav>
+    <main class="cuerpo">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="pie1">
+        <div class="modal_contenedor" id="inicio_sesion">
+            <div class="modal_informacion" style="height: 250px;">
+                <img class="img_inicio" src="{{ url_for('static', filename='imagenes/usuario.png') }}" alt="Imagen Error">
+                <div class="modal_texto" style="display: flex; flex-direction: column; gap: 10px; justify-items: center;">
+                    <label class="label_inicio" for="codigo-inicio">Ingrese su código</label>
+                    <input class="input_inicio" type="text" name="codigo-inicio" placeholder="123456...">
+                    <p class="regenerar_contraseña">Olvidé mi código</p>
+                </div>
+                <button class="btn_modal" id="btn_iniciar">Ingresar</button>
+            </div>
+        </div>
+        <div class="modal_contenedor" id="regenerar_contrasena">
+            <div class="modal_informacion" style="height: 250px;">
+                <img class="img_inicio" src="{{ url_for('static', filename='imagenes/usuario.png') }}" alt="Imagen Error">
+                <div class="modal_texto" style="display: flex; flex-direction: column; gap: 10px; justify-items: center;">
+                    <label class="label_inicio" for="correo-inicio">Ingrese su correo institucional .net</label>
+                    <input class="input_inicio" type="text" name="correo-inicio" placeholder="manfred.lagos@callmyway.net">
+                    <p class="regenerar_contraseña" style="width: 40px; margin: 0 0 0 327px;">Volver</p>
+                </div>
+                <button style="width: 140px;" class="btn_modal" id="btn_volver" onclick="ocultar_alerta()">Enviar código</button>
+            </div>
+        </div>
+        <div id="shadow" class="sombra"></div>
+    </footer>
+    <footer class="pie2">
+        CallMyWay y sus logos son marcas registradas bajo la propiedad de CallMyWay N.Y. S. A. Licenciados por la Sutel bajo el título SUTEL-TH-003. Todos los derechos reservados.
+    </footer>
+    <div class="pie3" style="display: none;"></div>
+</body>
+</html>

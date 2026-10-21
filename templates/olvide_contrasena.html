@@ -1,0 +1,23 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+<div class="form-container" style="display: flex; flex-direction: column;">
+    <form action="/Olvidé_mi_contraseña" method="POST">
+        <div class="formulario_registro">
+            <h1>Enviar código de verificación</h1>
+            <div class="password-container" style="margin: 20px 0;">
+                <div class="form-group">
+                    <label for="email" style="margin: 0 20px 0 0;">Correo Electrónico:</label>
+                    <input type="email" id="email" name="email" placeholder="Ingrese su correo electrónico" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit">Enviar Código de Verificación</button>
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <a href="/"><button type="submit">Volver</button></a>
+    </div>
+</div>
+{% endblock %}

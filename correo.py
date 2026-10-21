@@ -185,18 +185,33 @@ CallMyWay, IsMyConnect y su logo son marca registrada propiedad de CallMyWay NY 
 </html>
 """
 
-    mensaje.add_alternative(html, subtype="html")
 
-    ruta_logo = os.path.join("static", "img", "CMW_correo.png")
+    # Ruta del logo
+    ruta_logo = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "static", "img", "CMW_correo.png"
+    )
 
+    # Crear primero el contenido del mensaje
+    em.set_content(cuerpo)
+    em.add_alternative(html, subtype="html")
+
+    # Obtener la parte HTML
+    parte_html = em.get_body(preferencelist=("html",))
+
+    # Incorporar el logo al HTML
     with open(ruta_logo, "rb") as img:
-        tipo, _ = mimetypes.guess_type(ruta_logo)
-        maintype, subtype = tipo.split("/")
-        mensaje.get_payload()[1].add_related(
-            img.read(),
-            maintype=maintype,
-            subtype=subtype,
-            cid=logo_cid
+        imagen = img.read()
+
+    tipo, _ = mimetypes.guess_type(ruta_logo)
+    tipo = tipo or "image/png"
+    maintype, subtype = tipo.split("/", 1)
+
+    parte_html.add_related(
+        imagen,
+        maintype=maintype,
+        subtype=subtype,
+        cid=logo_cid
     )
 
     try:
@@ -215,4 +230,4 @@ CallMyWay, IsMyConnect y su logo son marca registrada propiedad de CallMyWay NY 
 
         return False
     
-#enviar_contrasena("Manfred Lagos", "manfred.lagos@callmyway.net", "123456")
+enviar_contrasena("Manfred Lagos", "manfred.lagos@callmyway.net", "123456")

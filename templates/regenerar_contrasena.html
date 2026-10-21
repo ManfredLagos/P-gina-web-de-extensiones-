@@ -1,0 +1,77 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+<div class="form-container" style="display: flex; flex-direction: column;">
+    <form method="POST">
+        <div class="formulario_registro">
+            <h1>Restablecer contraseña</h2>
+            <div class="password-container">
+                <label for="code" style="margin: 0 5px 0 0;">Ingrese el código de verificación:</label>
+                <input type="text" id="code" name="code" placeholder="Ingrese el código" required>
+            </div>
+            <div class="password-container">
+                <label for="new_pin" style="margin: 0 93px 0 0;">Ingrese el nuevo pin:</label>
+                <input type="password" id="new_pin" name="new_pin" placeholder="Ingrese el nuevo pin" required>
+                <span class="password-toggle" onclick="togglePasswordVisibility2()">
+                    <i class="fa fa-eye"></i>
+                </span>
+            </div>
+            <div class="password-container" style="margin-bottom: 20px;">
+                <label for="confirm_pin" style="margin: 0 123px 0 0;">Confirme su pin:</label>
+                <input type="password" id="confirm_pin" name="confirm_pin" placeholder="Confirme el nuevo pin" required>
+                <span class="password-toggle" onclick="togglePasswordVisibility3()">
+                    <i class="fa fa-eye"></i>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="submit">Restablecer contraseña</button>
+            </div>
+            <input type="hidden" name="pin" value="{{ pin }}">
+        </div>
+    </form>
+
+    <form method="POST" class="form-group" style="background: transparent; box-shadow: none; width: auto;">
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" name="pin" value="{{ pin }}">
+        <button type="submit" name="resend_pin" id="resend-code-button" class="countdown-button" disabled>Volver a enviar código (15)</button>
+    </form>
+</div>
+
+
+<script>
+    let countdown = 15;
+    let countdownInterval;
+
+    function startCountdown() {
+        const resendCodeButton = document.getElementById('resend-code-button');
+        resendCodeButton.classList.add('countdown-button');
+
+        countdownInterval = setInterval(() => {
+            countdown--;
+
+            if (countdown === 0) {
+                clearInterval(countdownInterval);
+                resendCodeButton.removeAttribute('disabled');
+                resendCodeButton.classList.remove('countdown-button');
+                resendCodeButton.innerText = 'Volver a enviar código';
+            } else {
+                resendCodeButton.innerText = `Volver a enviar código (${countdown})`;
+            }
+        }, 1000);
+    }
+
+    window.onload = startCountdown;
+
+    const resendCodeButton = document.getElementById('resend-code-button');
+    resendCodeButton.addEventListener('click', () => {
+        countdown = 15;
+        startCountdown();
+    });
+</script>
+{% endblock %}
+
+
+
+
+
+

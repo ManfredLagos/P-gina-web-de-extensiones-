@@ -1,0 +1,59 @@
+.formulario_registro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.formulario_registro h1{
+    margin-bottom: 20px;
+}
+
+.password-container{
+    width: 500px;
+}
+
+.password-container label{
+    color: #004992;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.password-container input{
+    width: 215px;
+    color: #747474;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);
+    border-radius: 6px;
+    border-color: rgb(187, 187, 187);
+    border-width: 2px;
+    border-style: solid;
+}
+
+.password-container input:hover {
+    background: #eff5fb;
+}
+
+.password-container input:focus {
+    border-color: rgb(102, 175, 233);
+    box-shadow: 2px 2px 2px #85bfed;
+    outline: none;                    
+}
+
+.form-group{
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.form-group button{
+    background-color: #337ab7;
+    color: #fff;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group button:hover{
+    background-color: #538aba;
+}

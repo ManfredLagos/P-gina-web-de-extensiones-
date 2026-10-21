@@ -1138,7 +1138,7 @@ def login():
 
 
 @app.route('/Registrar', methods=['GET', 'POST'])
-def register():
+def registrar():
     if request.method == 'POST':
         email = request.form.get('email')
         pin = request.form.get('pin')
@@ -1159,11 +1159,11 @@ def register():
 
         return redirect('/')
 
-    return render_template('register.html')
+    return render_template('registrar.html')
 
 
 @app.route('/Olvidé_mi_contraseña', methods=['GET', 'POST'])
-def forgot_password():
+def olvide_contrasena():
     if request.method == 'POST':
         email = request.form['email']
         code = generar_codigo_verificacion()
@@ -1180,12 +1180,12 @@ def forgot_password():
         session['email'] = email
         session['code'] = code
 
-        return redirect(url_for('reset_password'))
+        return redirect(url_for('regenerar_contrasena'))
 
-    return render_template('forgot_password.html')
+    return render_template('olvide_contrasena.html')
 
 @app.route('/Regenerar_Contraseña', methods=['GET', 'POST'])
-def reset_password():
+def regenerar_contrasena():
     if request.method == 'POST':
         code = request.form.get('code')
         new_pin = request.form.get('new_pin')
@@ -1193,7 +1193,7 @@ def reset_password():
 
         if new_pin != confirm_pin:
             error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
-            return render_template('reset_password.html', error_message=error_message, code=code)
+            return render_template('regenerar_contrasena.html', error_message=error_message, code=code)
 
         conn = get_db_connection()
         cur = conn.cursor()
@@ -1224,13 +1224,13 @@ def reset_password():
             session.pop('email', None)
             session.pop('code', None)
 
-            return render_template('reset_password.html', email=email, pin=code)
+            return render_template('regenerar_contrasena.html', email=email, pin=code)
 
         else:
             error_message = "El código es incorrecto. Por favor, verifica el código e inténtalo de nuevo."
-            return render_template('reset_password.html', error_message=error_message, pin_error=True)
+            return render_template('regenerar_contrasena.html', error_message=error_message, pin_error=True)
 
-    return render_template('reset_password.html')
+    return render_template('regenerar_contrasena.html')
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8000)

@@ -1,0 +1,35 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+<div class="form-container" style="display: flex; flex-direction: column;">
+    <form method="POST" action="/Registrar">
+        <div class="formulario_registro">
+            <h1>Registrar Usuario</h1>
+            <div class="password-container">
+                <label for="correo" style="margin: 0 9px 0 0;">Ingrese su correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+            </div>
+            <div class="password-container">
+                <label for="pin" style="margin: 0 20px 0 0;">Ingrese su pin de seguridad:</label> 
+                <input type="password" id="pin" name="pin" placeholder="Pin de seguridad" required>
+                <span class="password-toggle" onclick="togglePasswordVisibility()">
+                    <i class="fa fa-eye"></i>
+                </span>
+            </div>
+            <div class="password-container" style="margin-bottom: 20px;"> 
+                <label for="confirm_pin" style="margin: 0 7px 0 0;">Confirme su pin de seguridad:</Label>
+                <input type="password" id="confirm_pin" name="confirm_pin" placeholder="Pin de seguridad" required>
+                <span class="password-toggle" onclick="togglePasswordVisibility()">
+                    <i class="fa fa-eye"></i>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="submit">Registrar Usuario</button>
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <a href="/"><button type="submit">Volver</button></a>
+    </div>
+</div>
+{% endblock %}

@@ -1154,6 +1154,79 @@ def registrar():
             "INSERT INTO users (email, pin) VALUES (%s, %s)",
             (email, pin))
         conn.commit()
+
+        # Obtener el ID del usuario recién creado
+        user_id = cur.lastrowid
+
+        # 2. Definir las notas predeterminadas
+        notas_predeterminadas = [
+            # Agrega aquí tus notas
+            ("Recargas", """Espero se encuentre muy bien.
+
+Su recarga ha sido acreditada en su cuenta.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "green"),
+            ("Validar con desarrollo", """Espero se encuentre muy bien.
+
+Vamos a validar su solicitud con nuestro departamento de desarrollo. En breve, le estaremos brindando las actualizaciones del caso.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "blue"),
+            ("Confirmar cambios realizados", """Espero se encuentre muy bien.
+
+El cambio solicitado se ha realizado correctamente, por favor, realizar las pruebas de verificación.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "green"),
+            ("Copia a vendedor de la cuenta", """Espero se encuentre muy bien.
+
+Realizo copia al vendedor de la cuenta para que le brinde asistencia con la información solicitada.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "blue"),
+            ("Solicitar actualizaciones del caso", """¿Tiene alguna actualización sobre el caso?
+
+Si no tenemos noticias suyas en las próximas 24 horas, asumiremos que el problema o la solicitud fue resuelta y procederemos con cierre del ticket.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "green"),
+            ("Confirmar el funcionamiento", """Espero que se encuentre muy bien.
+
+Hemos realizado las verificaciones correspondientes al caso. Le solicitamos, por favor, proceder con las pruebas necesarias para confirmar el funcionamiento.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "blue"),
+            ("Cuenta no autorizada", """Espero que se encuentre muy bien.
+
+Para proceder con la solicitud, es necesario que sea aprobada desde uno de los correos autorizados de la cuenta. Por ello, realizo copia a los correos autorizados para que puedan brindarnos la aprobación correspondiente.
+
+Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
+
+Saludos cordiales,""", "green"),
+        ]
+
+        # 3. Insertar las notas asociadas al usuario
+        cur.executemany(
+            """
+            INSERT INTO notes (user_id, title, content, color)
+            VALUES (%s, %s, %s, %s)
+            """,
+            [
+                (user_id, titulo, contenido, color)
+                for titulo, contenido, color in notas_predeterminadas
+            ]
+        )
+
+        # 4. Confirmar todos los cambios
+        conn.commit()
+
         cur.close()
         conn.close()
 

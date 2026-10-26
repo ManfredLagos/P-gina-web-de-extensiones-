@@ -48,6 +48,7 @@ html {
    display: flex;
    background-color: rgb(255, 255, 255);
    justify-content: space-between;
+   padding: 0 50px;
 }
 
 .linea1{
@@ -58,6 +59,7 @@ html {
 .linea2{
    grid-area: linea2;
    background: linear-gradient(to bottom, #1B75D1, #053178);
+   padding: 0 50px;
 }
 
 .cuerpo{
@@ -67,6 +69,7 @@ html {
    position: relative;
    display: flex;
    flex-direction: column;
+   padding: 0 50px;
 }
 
 .pie1{

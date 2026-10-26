@@ -207,9 +207,21 @@ document.addEventListener('keydown', function(event) {
     }
 
     // Si estamos en otro contexto, controlar la validación antes de redirigir
-    if (event.key === 'Enter' && url === "/") {
+    if (event.key === 'Enter' && url === "/Generador_Script") {
         event.preventDefault(); // Prevenir submit por Enter
         continuar(); // Redirige o realiza la acción
+    }
+
+    // Si estamos en la página principal y se presiona Enter
+    if (event.key === 'Enter' && url === '/') {
+        event.preventDefault();
+
+        const form = document.querySelector('form');
+        if (form) {
+            form.requestSubmit();
+        }
+
+        return;
     }
 });
 //************************************************** Fin de la función *************************************************//
@@ -288,6 +300,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+
+//sombra inicio de sesión
+function sombra_inicio() {
+    preventDefault(); // Evitar el envío del formulario predeterminado
+
+    // Muestra el GIF de carga y la sombra
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('shadow_inicio').style.display = 'block';
+
+    // Esperar 2.5 segundos antes de redirigir a "texto.html"
+    setTimeout(function() { 
+        // Ocultar el GIF de carga y la sombra después de la redirección
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('shadow').style.display = 'none';
+    }, 2500); // Espera 2.5 segundos
+}
 
 
 

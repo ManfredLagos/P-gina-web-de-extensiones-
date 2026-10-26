@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Callmyway :: Comunicacion a mi manera</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/css.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
     <link id="logo" rel="icon" href="{{ url_for('static', filename='imagenes/titulo.ico') }}" type="image/ico">
     <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
 </head>
 <body class="contenedor">
-    <header class="cabeza">
+    <header class="cabeza_inicio">
         <div>
             <img class="imgcallmyway" src="{{ url_for('static', filename='imagenes/Captura_de_pantalla_2024-08-24_110935-removebg-preview.png') }}" alt="CallMyWay Logo">
         </div>
-        <form class="bg-white rounded shadow-5-strong p-5" method="POST" action="/login">
+        <form class="bg-white rounded shadow-5-strong p-5" method="POST" action="/login" onsubmit="sombra_inicio(event)">
             <div class="inicio_sesion">
                 <input type="text" name="email" placeholder="Correo Electrónico" required>
                 <div class="password-container">
@@ -22,22 +22,21 @@
                         <!-- Utilizamos el ícono de "ojo" de Font Awesome -->
                         <i class="fa fa-eye"></i>
                 </div>
-                <button type="submit">Iniciar sesión</button>
+                <button id="ingresar" type="submit"><img src="{{ url_for('static', filename='imagenes/play.png') }}" alt="Botón de play" style="height: 12px; width: 12px;"></button>
             </div>
         </form>
     </header>
-    <nav class="linea1"></nav>
-    <nav class="linea2">   
+    <nav class="linea1_inicio"></nav>
+    <nav class="linea2_inicio">   
         <div>
              <!--<a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>-->
         </div>
-        <div>
-            <a href="/Registrar">Registrarse</a>
-            <a href="/Olvidé_mi_contraseña">Olvidé mi contraseña</a>
-
+        <div class="enlace_linea">
+            <button><a href="/Registrar">Registrarse</a></button>
+            <button><a href="/Olvidé_mi_contraseña">Olvidé mi contraseña</a></button>
         </div>
     </nav>
-    <main class="cuerpo">
+    <main class="cuerpo_inicio">
         <div  class="seccion_fotos">
             <div class="carrusel-container">
                 <div class="carrusel">
@@ -53,53 +52,95 @@
         </div>
 
     </main>
-    <footer class="pie1">
-        <div id="mensaje" style="display: none; margin: 0; padding: 0;">
-            <div id = "mensaje_error">
-                <img id="error" class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
+    <footer class="pie1_inicio">
+        <div class="modal_contenedor" id="mensaje">
+            <div class="modal_informacion" id="mensaje_error">
+                <img class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
                 <div class="mensaje">
-                    <p style="padding: 0; margin: 0;">¡Por favor, seleccione una opción válida e ingrese un valor superior a 0 para continuar!</p>
+                    <p id="texto_error" style="padding: 0; margin: 0;">No fue posible iniciar sesión.</p>
                 </div>
-                <a href="/"><button class="volver">Volver</button></a>
+                <button type="button" class="btn_modal" onclick="cerrarMensaje()">Volver</button>
             </div>
         </div>
-        <div id="shadow" class="sombra"></div>
+        <div id="shadow_inicio" class="sombra"></div>
+        <!-- GIF de carga -->
+        <div id="loading_inicio" class="cargar">
+            <img src="{{ url_for('static', filename='imagenes/loading2.gif') }}" alt="Cargando..." style="width:100%; height:100%;">
+        </div>
+
     </footer>
-    <footer class="pie2">
+    <footer class="pie2_inicio">
         CallMyWay y sus logos son marcas registradas bajo la propiedad de CallMyWay N.Y. S. A. Licenciados por la Sutel bajo el título SUTEL-TH-003. Todos los derechos reservados.
     </footer>
     <div class="pie3" style="display: none;"></div>
 </body>
 
+<!-- Biblioteca FingerprintJS -->
+<script src="https://openfpcdn.io/fingerprintjs/v4"></script>
+
 <script>
-// script.js
 
-let index = 0;  // Variable que guarda la posición de la imagen actual
+let index = 0;
 
-// Función para mover las imágenes en el carrusel
 function moverImagen(direccion) {
-    const imagenes = document.querySelectorAll('.imgfondo'); // Obtener todas las imágenes
-    const totalImagenes = imagenes.length;  // Total de imágenes
+    const imagenes = document.querySelectorAll('.imgfondo');
+    const totalImagenes = imagenes.length;
 
-    // Cambiar el índice de la imagen mostrada
     index += direccion;
 
-    // Si llegamos al principio, ir al final
     if (index < 0) {
         index = totalImagenes - 1;
     } 
-    // Si llegamos al final, volver al principio
     else if (index >= totalImagenes) {
         index = 0;
     }
 
-    // Calcular la nueva posición del carrusel
-    const nuevaPosicion = -index * 800;  // Desplazamos 800px para cada imagen (ancho de la imagen)
-    
-    // Mover el contenedor de las imágenes
+    const nuevaPosicion = -index * 800;
     document.querySelector('.carrusel').style.transform = `translateX(${nuevaPosicion}px)`;
 }
 
+
+function sombra_inicio(event) {
+    // Evitar el envío inmediato del formulario
+    event.preventDefault();
+
+    // Mostrar el GIF de carga y la sombra
+    document.getElementById('loading_inicio').style.display = 'block';
+    document.getElementById('shadow_inicio').style.display = 'block';
+
+    // Continuar con el envío después de 2.5 segundos
+    setTimeout(function() {
+        document.getElementById('loading_inicio').style.display = 'none';
+        document.getElementById('shadow_inicio').style.display = 'none';
+
+        event.target.submit();
+    }, 2500);
+}
+
+function mostrarErrorLogin(tipo) {
+    const modal = document.getElementById('mensaje');
+    const texto = document.getElementById('texto_error');
+    const sombra = document.getElementById('shadow_inicio');
+
+    const mensajes = {
+        correo: 'El correo electrónico ingresado no se encuentra registrado.',
+        contraseña: 'El PIN ingresado es incorrecto.',
+        general: 'No fue posible iniciar sesión. Inténtelo nuevamente.'
+    };
+
+    texto.textContent = mensajes[tipo] || mensajes.general;
+
+    modal.style.display = 'block';
+    sombra.style.display = 'block';
+}
+
+function cerrarMensaje() {
+    const modal = document.getElementById('mensaje');
+    const sombra = document.getElementById('shadow_inicio');
+
+    modal.style.display = 'none';
+    sombra.style.display = 'none';
+}
 </script>
 
 </html>

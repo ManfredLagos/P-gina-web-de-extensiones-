@@ -3,7 +3,7 @@
 
 {% block content %}
   
-<h1 style="height: 100px;">Respuestas Rápidas</h1>
+<h1 style="height: 70px;">Respuestas Rápidas</h1>
 <!--<div class="form-container"></div>-->
 
 <div id="board">
@@ -12,12 +12,16 @@
         <form id="noteForm">
             <div class="note-header">
                 <input type="text" id="title" placeholder="Título de la respuesta"required>
-                    <div class="color-picker">
-                        <div class="selected green"></div>
-                        <div class="option option2 blue" data-color="blue"></div>
-                        <div class="option option1 green" data-color="green"></div>
-                    </div>
-                <img style="width: 18px; height: 18px;" src="/static/imagenes/mas.png">
+                <div class="color-picker">
+                    <div class="selected green"></div>
+                    <div class="option option4 grey" data-color="grey"></div>
+                    <div class="option option3 pink" data-color="pink"></div>
+                    <div class="option option2 blue" data-color="blue"></div>
+                    <div class="option option1 green" data-color="green"></div>
+                </div>
+                <button type="submit" style="padding: 0; border: none; background: none; cursor: pointer;">
+                    <img style="width: 18px; height: 18px;" src="/static/imagenes/mas.png" alt="Agregar nota" title="Agregar nota">
+                </button>
                 <img style="display: none;" alt="Eliminar" onclick="eliminarNota(1)">
             </div>
             <textarea class="note-content" id="content" placeholder="Escriba aquí la respuesta rápida..."required></textarea>
@@ -43,22 +47,35 @@
 </script>
 
 <script>
-    const picker = document.querySelector(".color-picker");
-    const selected = document.querySelector(".selected");
-    selected.onclick = () => {
-        picker.classList.toggle("open");
+
+const picker = document.querySelector(".color-picker");
+const selected = picker.querySelector(".selected");
+
+// Inicializar el color seleccionado
+selected.dataset.color = "green";
+
+selected.onclick = () => {
+    picker.classList.toggle("open");
+};
+
+picker.querySelectorAll(".option").forEach(option => {
+    option.onclick = () => {
+        const color = option.dataset.color;
+
+        // Actualizar la apariencia y el valor del color
+        selected.className = "selected " + color;
+        selected.dataset.color = color;
+
+        picker.classList.remove("open");
+    };
+});
+
+document.addEventListener("click", e => {
+    if (!picker.contains(e.target)) {
+        picker.classList.remove("open");
     }
-    document.querySelectorAll(".option").forEach(option => {
-        option.onclick = () => {
-            selected.className = "selected " + option.dataset.color;
-            picker.classList.remove("open");
-        }
-    });
-    document.addEventListener("click", e => {
-        if (!picker.contains(e.target)) {
-            picker.classList.remove("open");
-        }
-    });
+});
+
 </script>
 
 {% endblock %}

@@ -9,7 +9,7 @@
     height: 55px;
     width: 180px;
     right: 0;
-    margin: 4px 40px 1px 5px;
+    margin: 4px 0px 1px 5px;
     
 }
 
@@ -61,6 +61,19 @@
 }
 
 .sombra {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Mantenerlo fijo en la pantalla */
+    top: 0; /* Posicionar en la parte superior */
+    left: 0; /* Posicionar en la parte izquierda */
+    width: 100%; /* Ancho total de la pantalla */
+    height: 100%; /* Alto total de la pantalla */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+    z-index: 9998; /* Detrás del GIF, pero por encima del resto del contenido */
+    margin: 0;
+    padding: 0;
+}
+
+.sombra_inicio {
     display: none; /* Oculto por defecto */
     position: fixed; /* Mantenerlo fijo en la pantalla */
     top: 0; /* Posicionar en la parte superior */

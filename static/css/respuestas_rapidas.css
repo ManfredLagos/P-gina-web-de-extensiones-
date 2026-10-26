@@ -58,8 +58,10 @@ input, textarea, select, button {
 .note-footer { display: flex; justify-content: flex-end; gap: 8px; }
 .note img { width: 20px; height: 20px; cursor: pointer; transition: transform 0.2s; }
 .note img:hover { transform: scale(1.15); }
-.green { background: #bdf0bd; }
-.blue { background: #b1cef5; }
+.green { background: #aaf7aa; }
+.blue { background: #aacbf5; }
+.pink { background: #f5b1b1; }
+.grey { background: #b4b4b4; }
 
 #board{
     margin-bottom: 20px;
@@ -252,7 +254,7 @@ input, textarea, select, button {
 }
 
 /* Posición cerrada */
-.option1,.option2 {
+.option1,.option2,.option3,.option4 {
     top: 0;
     transform: translateY(0) scale(.5);
 }
@@ -268,8 +270,16 @@ input, textarea, select, button {
     transform: translateY(25px);
 }
 
-.color-picker.open .option1 {
+.color-picker.open .option3 {
     transform: translateY(50px);
+}
+
+.color-picker.open .option4 {
+    transform: translateY(75px);
+}
+
+.color-picker.open .option1 {
+    transform: translateY(100px);
 }
 
 /* Hover */
@@ -278,20 +288,17 @@ input, textarea, select, button {
     transform: translateY(25px) scale(1.1);
 }
 
-.color-picker.open .option1:hover {
+.color-picker.open .option3:hover {
     transform: translateY(50px) scale(1.1);
 }
 
-/* Colores */
-
-.green {
-    background: #59d484;
+.color-picker.open .option4:hover {
+    transform: translateY(75px) scale(1.1);
 }
 
-.blue {
-    background: #6b95c9;
+.color-picker.open .option1:hover {
+    transform: translateY(100px) scale(1.1);
 }
-
 
 /*##########################################################################*/
 
@@ -300,12 +307,15 @@ input, textarea, select, button {
     justify-content: space-between;
     align-items: center;
     background: none;
-    padding: 12px;
+    padding: 0 2px 4x !important;
     border-radius: 10px;
+    width: 100%;
+    gap: 5px;
 }
 
 .checkbox_cuerpo span{
     color: #181818;
+    padding-bottom: 4px;
 }
 
 /* SWITCH */

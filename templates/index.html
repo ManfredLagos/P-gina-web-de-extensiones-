@@ -13,7 +13,7 @@
         <div>
             <img class="imgcallmyway" src="{{ url_for('static', filename='imagenes/Captura_de_pantalla_2024-08-24_110935-removebg-preview.png') }}" alt="CallMyWay Logo">
         </div>
-        <form class="bg-white rounded shadow-5-strong p-5" method="POST" action="/login">
+        <form class="bg-white rounded shadow-5-strong p-5" method="POST" action="/login" onsubmit="sombra_inicio(event)">
             <div class="inicio_sesion">
                 <input type="text" name="email" placeholder="Correo Electrónico" required>
                 <div class="password-container">
@@ -22,7 +22,7 @@
                         <!-- Utilizamos el ícono de "ojo" de Font Awesome -->
                         <i class="fa fa-eye"></i>
                 </div>
-                <button type="submit"><img src="{{ url_for('static', filename='imagenes/play.png') }}" alt="Botón de play" style="height: 12px; width: 12px;"></button>
+                <button id="ingresar" type="submit"><img src="{{ url_for('static', filename='imagenes/play.png') }}" alt="Botón de play" style="height: 12px; width: 12px;"></button>
             </div>
         </form>
     </header>
@@ -53,22 +53,53 @@
 
     </main>
     <footer class="pie1_inicio">
-        <div id="mensaje" style="display: none; margin: 0; padding: 0;">
-            <div id = "mensaje_error">
-                <img id="error" class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
+        <div class="modal_contenedor" id="mensaje">
+            <div class="modal_informacion" id="mensaje_error">
+                <img class="img_error" src="{{ url_for('static', filename='imagenes/error.png') }}" alt="Imagen Error">
                 <div class="mensaje">
-                    <p style="padding: 0; margin: 0;">¡Por favor, seleccione una opción válida e ingrese un valor superior a 0 para continuar!</p>
+                    <p id="texto_error" style="padding: 0; margin: 0;">No fue posible iniciar sesión.</p>
                 </div>
-                <a href="/"><button class="volver">Volver</button></a>
+                <button type="button" class="btn_modal" onclick="cerrarMensaje()">Volver</button>
             </div>
         </div>
-        <div id="shadow" class="sombra"></div>
+        <div id="shadow_inicio" class="sombra"></div>
+        <!-- GIF de carga -->
+        <div id="loading_inicio" class="cargar">
+            <img src="{{ url_for('static', filename='imagenes/loading2.gif') }}" alt="Cargando..." style="width:100%; height:100%;">
+        </div>
+        
+        
+<div id="mensaje" style="display: none; margin: 0; padding: 0;">
+    <div id="mensaje_error">
+        <img
+            id="error"
+            class="img_error"
+            src="{{ url_for('static', filename='imagenes/error.png') }}"
+            alt="Imagen de error"
+        >
+
+        <div class="mensaje">
+            <p id="texto_error" style="padding: 0; margin: 0;">
+                No fue posible iniciar sesión.
+            </p>
+        </div>
+
+        <button type="button" class="volver" onclick="cerrarMensaje()">
+            Volver
+        </button>
+    </div>
+</div>
+
+
     </footer>
     <footer class="pie2_inicio">
         CallMyWay y sus logos son marcas registradas bajo la propiedad de CallMyWay N.Y. S. A. Licenciados por la Sutel bajo el título SUTEL-TH-003. Todos los derechos reservados.
     </footer>
     <div class="pie3" style="display: none;"></div>
 </body>
+
+<!-- Biblioteca FingerprintJS -->
+<script src="https://openfpcdn.io/fingerprintjs/v4"></script>
 
 <script>
 
@@ -91,6 +122,48 @@ function moverImagen(direccion) {
     document.querySelector('.carrusel').style.transform = `translateX(${nuevaPosicion}px)`;
 }
 
+
+function sombra_inicio(event) {
+    // Evitar el envío inmediato del formulario
+    event.preventDefault();
+
+    // Mostrar el GIF de carga y la sombra
+    document.getElementById('loading_inicio').style.display = 'block';
+    document.getElementById('shadow_inicio').style.display = 'block';
+
+    // Continuar con el envío después de 2.5 segundos
+    setTimeout(function() {
+        document.getElementById('loading_inicio').style.display = 'none';
+        document.getElementById('shadow_inicio').style.display = 'none';
+
+        event.target.submit();
+    }, 2500);
+}
+
+function mostrarErrorLogin(tipo) {
+    const modal = document.getElementById('mensaje');
+    const texto = document.getElementById('texto_error');
+    const sombra = document.getElementById('shadow_inicio');
+
+    const mensajes = {
+        correo: 'El correo electrónico ingresado no se encuentra registrado.',
+        contraseña: 'El PIN ingresado es incorrecto.',
+        general: 'No fue posible iniciar sesión. Inténtelo nuevamente.'
+    };
+
+    texto.textContent = mensajes[tipo] || mensajes.general;
+
+    modal.style.display = 'block';
+    sombra.style.display = 'block';
+}
+
+function cerrarMensaje() {
+    const modal = document.getElementById('mensaje');
+    const sombra = document.getElementById('shadow_inicio');
+
+    modal.style.display = 'none';
+    sombra.style.display = 'none';
+}
 </script>
 
 </html>

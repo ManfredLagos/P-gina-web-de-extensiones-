@@ -9,128 +9,7 @@
     <script src="{{ url_for('static', filename='funciones/fingerprint.min.js') }}"></script>
     <script src="{{ url_for('static', filename='funciones/script1.js') }}"></script>
 </head>
-<style>
-    .chat_bot{
-   background: #9dc010;
-   padding: 10px;
-   margin: 20px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;cursor: pointer;
-   box-shadow: 2px 2px 2px 2px rgba(171, 209, 17, 0.27);
 
-}
-
-.chat_bot:hover{
-   background: #abd111;
-}
-
-.asistente_virtual{
-   display: flex;
-   flex-direction: column;
-   margin: 20px;
-   width: 300px;
-   height: 400px;
-   border: #9dc010 solid 3px;
-   border-radius: 10px;
-   box-shadow: 3px 3px 3px rgba(0, 0, 0, .57);
-   align-items: center;
-}
-
-.message-input{
-   display: flex;
-   flex-direction: row;
-}
-
-.message-send {
-   width: 28px;
-   height: 28px;
-   background-color: transparent;
-   cursor: pointer; /* Añadimos el cursor de apuntador para indicar que el botón es clickeable */
-   align-self: flex-end;
-   display: flex;
-   justify-content: center; /* Centra la imagen horizontalmente */
-   align-items: center; /* Centra la imagen verticalmente */
-   border-radius: 5px;
-}
-
-.message-send:hover{
-   background: #a1a1a1;
-}
-
-.boton_archivo{
-   display: flex;
-   width: 22px;
-   height: 22px;
-   padding: 3px;
-   margin: 3px;
-   cursor: pointer;
-   background-color: transparent;
-   justify-content: center; /* Centra la imagen horizontalmente */
-   align-items: center; /* Centra la imagen verticalmente */
-   margin-top: 10px;
-   border-radius: 5px;
-   /*flexbox: ;*/
-}
-
-.boton_archivo:hover{
-   background: #a1a1a1;
-}
-
-.textarea_chatbot{
-   margin-top: 8px;
-   border-radius: 5px;
-   border: none;
-   width: 75%;
-   font-size: 16px;
-   padding: 5px 5px 0 5px;
-   outline: none;
-   resize: none;
-
-}
-
-
-/*chat box*/
-
-.chatbox {
-   background: #ffffff;
-   overflow-y: auto; /* Agrega desplazamiento vertical si el contenido supera la altura */
-   margin: 0;
-   padding: 0;
-}
-
-.chatbox .chat {
-   display: flex;
-   background: #ffffff;
-
-}
-       
-.chatbox .chat p {
-   color: rgb(255, 255, 255);
-   font-size: 0.95rem;
-   padding: 12px 16px;
-   border-radius: 10px 10px 0px 10px;
-   background: rgb(228, 222, 222);
-}
-
-.chatbox .incoming {
-   padding: 0 50px 5px 3px;
-}
-       
-.chatbox .incoming p {
-   color: white;
-   border-radius: 10px 10px 10px 0px;
-   background: #337ab7;
-       
-}
-        
-.chatbox .outgoing {
-   margin: 8px 0;
-   justify-content: flex-end; 
-   padding: 0 10px 0 0;   
-   top: 0%;        
-}
-</style>
 <body class="contenedor">
     <header class="cabeza">
         
@@ -147,8 +26,8 @@
             <a href="/Generador_Script"><button class="inicio" aria-label="Inicio">Inicio</button></a>
             <!--<a href="/soporte"><button class="soporte" aria-label="Inicio">Soporte</button></a>-->
             <!--<a href="/respuestas"><button class="respuestas" aria-label="Respuestas">Respuestas</button></a>-->
-            <a href="/prueba"><button class="respuestas" aria-label="Inicio">Respuestas</button></a>
-            <a href="/Genedador_contraseña"><button class="respuestas" aria-label="Inicio" style="width: 140px;">Generar Contraseñas</button></a>
+            <a href="/Respuestas_Rapidas"><button class="respuestas" aria-label="Inicio">Respuestas</button></a>
+            <a href="/Genedador_Contraseña"><button class="respuestas" aria-label="Inicio" style="width: 140px;">Generar Contraseñas</button></a>
             <a href="/Chat_IA"><button class="respuestas" aria-label="Inicio">Chatbot</button></a>
             <a href="/"><button class="respuestas" aria-label="Inicio">Salir</button></a>
         </div>

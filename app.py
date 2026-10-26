@@ -11,6 +11,7 @@ from detector_pdf import analizar_pdf
 from ollama_client import consultar_ollama
 from werkzeug.utils import secure_filename
 from codigo import generar_codigo_verificacion, enviar_correo_verificacion
+import bcrypt
 
 app = Flask(__name__)
 
@@ -31,7 +32,8 @@ politicas = []
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="190.113.81.253",
+        #host="190.113.81.253",
+        host="127.0.0.1",
         user="manfred",
         password="CwsrOPiEn3Dh%bcd",
         database="postits_db",
@@ -789,74 +791,25 @@ def descargar_script():
 def texto():
     return render_template('texto.html')
 
-@app.route('/respuestas')
-def respuestas():
-    return render_template('respuestas.html')
+@app.route('/Respuestas_Rapidas')
+def respuestas_rapidas():
+    return render_template('respuestas_rapidas.html')
 
-@app.route('/prueba')
-def prueba():
-    return render_template('prueba.html')
-
-@app.route('/Genedador_contraseña')
+@app.route('/Genedador_Contraseña')
 def Genedador_contraseña():
     return render_template('contraseña.html')
 
 #-------------------------------------  Post It  ----------------------------------------
 
-@app.route("/check_session", methods=["POST"])
-def check_session():
-    data = request.get_json()
-    fingerprint = data.get("fingerprint")
-    ip = request.remote_addr
-    conn = get_db_connection()
-    cur = conn.cursor(dictionary=True)
-    cur.execute("""
-        SELECT
-            u.id,
-            u.nombre
-        FROM dispositivos d
-        INNER JOIN usuarios u
-            ON u.id = d.user_id
-        WHERE
-            d.ip=%s
-            AND d.fingerprint=%s
-    """, (ip, fingerprint))
-    usuario = cur.fetchone()#
-
-    if usuario:
-        session["user_id"] = usuario["id"]
-        session["nombre"] = usuario["nombre"]
-        cur.execute("""
-            UPDATE dispositivos
-            SET
-                ultimo_uso = NOW()
-            WHERE
-                ip=%s
-                AND fingerprint=%s
-        """, (ip, fingerprint))
-        conn.commit()
-        cur.close()
-        conn.close()
-        return jsonify({
-            "authenticated": True
-        })
-
-    cur.close()
-    conn.close()
-
-    return jsonify({
-        "authenticated": False
-    })
-
 @app.route('/get_notes')
 def get_notes():
-    #if "user_id" not in session:
-    #    return jsonify({"error": "No autorizado"}), 401
-    user_id = 1 #session["user_id"]
+    if "user_id" not in session:
+        return jsonify({"error": "No autorizado"}), 401
+    user_id = session["user_id"]
     conn = get_db_connection()
     cur = conn.cursor(dictionary=True)
     cur.execute("""
-        SELECT id,title,content,color,position FROM notes WHERE user_id=%s ORDER BY position
+        SELECT id,title,content,color,position,cuerpo FROM notes WHERE user_id=%s ORDER BY position
     """,
     (user_id,))
     notes = cur.fetchall()
@@ -873,28 +826,53 @@ def add_note():
 
     data = request.get_json()
     user_id = session["user_id"]
+
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        INSERT INTO notes (user_id, title, content, color) VALUES (%s, %s, %s, %s)
-    """, (
-        user_id,
-        data["title"],
-        data["content"],
-        data["color"]
+    try:
+        # Desplazar las notas existentes una posición
+        cur.execute("""
+            UPDATE notes
+            SET position = position + 1
+            WHERE user_id = %s
+            ORDER BY position DESC
+        """, (user_id,))
 
-    ))
+        # Crear la nueva nota en la posición 1
+        cur.execute("""
+            INSERT INTO notes
+                (user_id, title, content, color, position, cuerpo)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (
+            user_id,
+            data["title"],
+            data["content"],
+            data["color"],
+            1,
+            data["cuerpo"]
+        ))
 
-    conn.commit()
-    note_id = cur.lastrowid
-    cur.close()
-    conn.close()
+        note_id = cur.lastrowid
 
-    return jsonify({
-        "status": "ok",
-        "id": note_id
-    })
+        conn.commit()
+
+        return jsonify({
+            "status": "ok",
+            "id": note_id,
+            "position": 1
+        }), 201
+
+    except Exception:
+        conn.rollback()
+        app.logger.exception("Error al crear la nota")
+        return jsonify({
+            "error": "No se pudo crear la nota"
+        }), 500
+
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.route('/edit_note/<int:note_id>', methods=['PUT'])
@@ -928,6 +906,7 @@ def edit_note(note_id):
         return jsonify({
             "error": "La respuesta no existe."
         }),404
+        
     return jsonify({
         "status":"ok"
     })
@@ -970,6 +949,10 @@ def update_positions():
     cur = conn.cursor()
 
     for posicion in data["positions"]:
+
+        # No permitir que otra nota ocupe la posición 0
+        if posicion["position"] == 0:
+            continue
 
         cur.execute("""
             UPDATE notes SET position=%s WHERE id=%s AND user_id=%s
@@ -1041,30 +1024,32 @@ def api_chat():
         if informacion_pdf:
 
             contexto = f"""
-Se ha adjuntado un documento PDF.
+            Se ha adjuntado un documento PDF.
 
-Información del documento:
+            Información del documento:
 
-- Tipo: {tipo_documento}
-- Páginas: {informacion_pdf['paginas']}
-- Páginas con texto: {informacion_pdf['paginas_con_texto']}
-- Páginas con imágenes: {informacion_pdf['paginas_con_imagenes']}
-- Cantidad de imágenes: {informacion_pdf['cantidad_imagenes']}
-- Caracteres de texto: {informacion_pdf['caracteres_texto']}
+            - Tipo: {tipo_documento}
+            - Páginas: {informacion_pdf['paginas']}
+            - Páginas con texto: {informacion_pdf['paginas_con_texto']}
+            - Páginas con imágenes: {informacion_pdf['paginas_con_imagenes']}
+            - Cantidad de imágenes: {informacion_pdf['cantidad_imagenes']}
+            - Caracteres de texto: {informacion_pdf['caracteres_texto']}
 
-El documento será procesado posteriormente para extraer
-su contenido completo.
-"""
+            El documento será procesado posteriormente para extraer
+            su contenido completo.
+            """
+
         prompt = f"""
 
-Responde siempre en español.
+            Responde siempre en español.
 
-Consulta del usuario:
+            Consulta del usuario:
 
-{texto}
+            {texto}
 
-{contexto}
-"""
+            {contexto}
+        """
+
         inicio_ollama = time.perf_counter()
 
         respuesta_ia = consultar_ollama(
@@ -1123,117 +1108,43 @@ def login():
                 session['email'] = user[1]
                 return redirect('/Generador_Script')
             else:
-                error_message = "Las credenciales ingresadas son incorrectas. Por favor, verifica tu correo electrónico y contraseña e inténtalo nuevamente."
-                session['error_message'] = {'text': error_message}
-                session['email'] = email  # Mantener el correo ingresado en la sesión
-                return redirect(url_for('index'))
+                session['email'] = email
+                return render_template(
+                    'index.html',
+                    error_login='contraseña'
+                )
 
         else:
-            error_message = "La cuenta ingresada no está registrada. Por favor, asegúrate de haber ingresado correctamente tus credenciales o crea una cuenta nueva."
-            session['error_message'] = {'text': error_message, 'text_color': text_color,
-                                        'font_weight': font_weight}
-            return redirect(url_for('index'))
+            return render_template(
+                'index.html',
+                error_login='correo'
+            )
 
-    return render_template('index.html')
-
+    return render_template('login.html')
 
 @app.route('/Registrar', methods=['GET', 'POST'])
 def registrar():
     if request.method == 'POST':
-        email = request.form.get('email')
-        pin = request.form.get('pin')
-        confirm_pin = request.form.get('confirm_pin')
-
-        if pin != confirm_pin:
-            error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
-            return render_template('/Registrar', error_message=error_message, pin=pin)
+        email = request.form['email']
+        pin = request.form['pin']
+        code = generar_codigo_verificacion()
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(
-            "INSERT INTO users (email, pin) VALUES (%s, %s)",
-            (email, pin))
+        cur.execute("INSERT INTO new_pin (email, code) VALUES (%s, %s)", (email, code))
         conn.commit()
-
-        # Obtener el ID del usuario recién creado
-        user_id = cur.lastrowid
-
-        # 2. Definir las notas predeterminadas
-        notas_predeterminadas = [
-            # Agrega aquí tus notas
-            ("Recargas", """Espero se encuentre muy bien.
-
-Su recarga ha sido acreditada en su cuenta.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "green"),
-            ("Validar con desarrollo", """Espero se encuentre muy bien.
-
-Vamos a validar su solicitud con nuestro departamento de desarrollo. En breve, le estaremos brindando las actualizaciones del caso.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "blue"),
-            ("Confirmar cambios realizados", """Espero se encuentre muy bien.
-
-El cambio solicitado se ha realizado correctamente, por favor, realizar las pruebas de verificación.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "green"),
-            ("Copia a vendedor de la cuenta", """Espero se encuentre muy bien.
-
-Realizo copia al vendedor de la cuenta para que le brinde asistencia con la información solicitada.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "blue"),
-            ("Solicitar actualizaciones del caso", """¿Tiene alguna actualización sobre el caso?
-
-Si no tenemos noticias suyas en las próximas 24 horas, asumiremos que el problema o la solicitud fue resuelta y procederemos con cierre del ticket.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "green"),
-            ("Confirmar el funcionamiento", """Espero que se encuentre muy bien.
-
-Hemos realizado las verificaciones correspondientes al caso. Le solicitamos, por favor, proceder con las pruebas necesarias para confirmar el funcionamiento.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "blue"),
-            ("Cuenta no autorizada", """Espero que se encuentre muy bien.
-
-Para proceder con la solicitud, es necesario que sea aprobada desde uno de los correos autorizados de la cuenta. Por ello, realizo copia a los correos autorizados para que puedan brindarnos la aprobación correspondiente.
-
-Quedamos a su disposición para cualquier información adicional o consulta que pueda surgir.
-
-Saludos cordiales,""", "green"),
-        ]
-
-        # 3. Insertar las notas asociadas al usuario
-        cur.executemany(
-            """
-            INSERT INTO notes (user_id, title, content, color)
-            VALUES (%s, %s, %s, %s)
-            """,
-            [
-                (user_id, titulo, contenido, color)
-                for titulo, contenido, color in notas_predeterminadas
-            ]
-        )
-
-        # 4. Confirmar todos los cambios
-        conn.commit()
-
         cur.close()
         conn.close()
 
-        return redirect('/')
+        enviar_correo_verificacion(email, code)
+
+        session['email'] = email
+        session['pin'] = pin
+        session['code'] = code
+
+        return redirect(url_for('registrar_usuario'))
 
     return render_template('registrar.html')
-
 
 @app.route('/Olvidé_mi_contraseña', methods=['GET', 'POST'])
 def olvide_contrasena():
@@ -1304,6 +1215,62 @@ def regenerar_contrasena():
             return render_template('regenerar_contrasena.html', error_message=error_message, pin_error=True)
 
     return render_template('regenerar_contrasena.html')
+
+@app.route('/Registrar_Usuario', methods=['GET', 'POST'])
+def registrar_usuario():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        pin = request.form.get('pin')
+
+        if pin != confirm_pin:
+            error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
+            return render_template('/Registrar', error_message=error_message, pin=pin)
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO users (email, pin) VALUES (%s, %s)",
+            (email, pin))
+        conn.commit()
+
+        # Obtener el ID del usuario recién creado
+        user_id = cur.lastrowid
+
+        # 2. Definir las notas predeterminadas
+        notas_predeterminadas = [
+            # Agrega aquí tus notas
+            ("Recargas", """Su recarga ha sido acreditada en su cuenta.""", "green", 1, 1),
+                ("Validar con desarrollo", """Vamos a validar su solicitud con nuestro departamento de desarrollo. En breve, le estaremos brindando las actualizaciones del caso.""", "blue", 2, 1),
+                ("Confirmar cambios realizados", """El cambio solicitado se ha realizado correctamente, por favor, realizar las pruebas de verificación.""", "green", 3, 1),
+                ("Copia a vendedor de la cuenta", """Realizo copia al vendedor de la cuenta para que le brinde asistencia con la información solicitada.""", "blue", 4, 1),
+                ("Solicitar actualizaciones del caso", """¿Tiene alguna actualización sobre el caso?
+
+    Si no tenemos noticias suyas en las próximas 24 horas, asumiremos que el problema o la solicitud fue resuelta y procederemos con cierre del ticket.""", "green", 5, 1),
+                ("Confirmar el funcionamiento", """Hemos realizado las verificaciones correspondientes al caso. Le solicitamos, por favor, proceder con las pruebas necesarias para confirmar el funcionamiento.""", "blue", 6, 1),
+                ("Cuenta no autorizada", """Para proceder con la solicitud, es necesario que sea aprobada desde uno de los correos autorizados de la cuenta. Por ello, realizo copia a los correos autorizados para que puedan brindarnos la aprobación correspondiente.""", "green", 7, 1),
+        ]
+
+        # 3. Insertar las notas asociadas al usuario
+        cur.executemany(
+            """
+            INSERT INTO notes (user_id, title, content, color, position, cuerpo)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """,
+            [
+                (user_id, titulo, contenido, color, position, cuerpo)
+                for titulo, contenido, color, position, cuerpo in notas_predeterminadas
+            ]
+        )
+
+        # 4. Confirmar todos los cambios
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        return redirect('/')
+
+    return render_template('confirmar_registro.html')
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=8000)

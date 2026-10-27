@@ -1127,7 +1127,12 @@ def registrar():
     if request.method == 'POST':
         email = request.form['email']
         pin = request.form['pin']
+        confirm_pin = request.form['confirm_pin']
         code = generar_codigo_verificacion()
+
+        if pin != confirm_pin:
+            error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
+            return render_template('/Registrar', error_message=error_message, pin=pin)
 
         conn = get_db_connection()
         cur = conn.cursor()
@@ -1142,7 +1147,10 @@ def registrar():
         session['pin'] = pin
         session['code'] = code
 
-        return redirect(url_for('registrar_usuario'))
+        return jsonify({
+                "success": True,
+                "redirect_url": url_for('registrar_usuario')
+            })
 
     return render_template('registrar.html')
 
@@ -1219,12 +1227,15 @@ def regenerar_contrasena():
 @app.route('/Registrar_Usuario', methods=['GET', 'POST'])
 def registrar_usuario():
     if request.method == 'POST':
-        email = request.form.get('email')
-        pin = request.form.get('pin')
+        email = session.get('email')
+        pin = session.get('pin')
+        code = session.get('code')
+        confirm_code = request.form.get('confirm_code')
 
-        if pin != confirm_pin:
-            error_message = "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
-            return render_template('/Registrar', error_message=error_message, pin=pin)
+        if code != confirm_code:
+            print("Error en el código")
+            error_message = "El código es incorrecto. Por favor, inténtalo de nuevo."
+            return render_template('confirmar_registro.html', error_message=error_message, code=code)
 
         conn = get_db_connection()
         cur = conn.cursor()
@@ -1269,6 +1280,19 @@ def registrar_usuario():
         conn.close()
 
         return redirect('/')
+
+    elif 'resend_pin' in request.form:
+            code = session.get('code')
+            email = session.get('email')
+            enviar_correo_verificacion(email, code)
+            session.pop('email', None)
+            session.pop('code', None)
+
+            return render_template('confirmar_registro.html', email=email, pin=code)
+
+    else:
+            error_message = "El código es incorrecto. Por favor, verifica el código e inténtalo de nuevo."
+            return render_template('confirmar_registro.html', error_message=error_message, pin_error=True)
 
     return render_template('confirmar_registro.html')
 

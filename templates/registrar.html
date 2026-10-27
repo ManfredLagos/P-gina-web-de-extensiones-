@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="form-container" style="display: flex; flex-direction: column;">
-    <form id="form_registro" method="POST" action="/Registrar_Usuario">
+    <form id="form_registro" method="POST" action="/Registrar">
         <div class="formulario_registro">
             <h1>Registrar Usuario</h1>
 
@@ -63,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('mensaje_registro');
     const texto = document.getElementById('texto_error');
     const sombra = document.getElementById('shadow_inicio');
-    const confirmacion = document.getElementById('confirmacion_registro');
     const boton = document.getElementById('btn_registrar');
 
     function mostrarErrorRegistro(tipo) {
@@ -139,13 +138,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Mostrar éxito únicamente después de confirmar el registro
-            modal.style.display = 'none';
-            confirmacion.style.display = 'flex';
-            sombra.style.display = 'block';
-
             setTimeout(function () {
-                window.location.href = '/';
+                window.location.href = '/Registrar_Usuario';
             }, 2000);
 
         } catch (error) {

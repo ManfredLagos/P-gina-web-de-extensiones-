@@ -2,12 +2,12 @@
 
 {% block content %}
 <div class="form-container" style="display: flex; flex-direction: column;">
-    <form method="POST">
+    <form method="POST" action="/Registrar_Usuario">
         <div class="formulario_registro">
             <h1>Confirmar Registro</h1>
             <div class="password-container" style="width: 470px; margin-bottom: 15px;">
                 <label for="code" style="margin-right: 5px;">Ingrese el código de verificación:</label>
-                <input type="text" id="code" name="code" placeholder="Ingrese el código" required>
+                <input type="text" id="confirm_code" name="confirm_code" placeholder="Ingrese el código" required>
             </div>
             <div class="form-group">
                 <button type="submit">Registrar Usuario</button>

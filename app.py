@@ -12,6 +12,8 @@ from ollama_client import consultar_ollama
 from werkzeug.utils import secure_filename
 from codigo import generar_codigo_verificacion, enviar_correo_verificacion
 import bcrypt
+from urllib.parse import urlparse
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -33,7 +35,7 @@ politicas = []
 def get_db_connection():
     return mysql.connector.connect(
         #host="190.113.81.253",
-        host="127.0.0.1",
+        host="192.168.15.131",
         user="manfred",
         password="CwsrOPiEn3Dh%bcd",
         database="postits_db",
@@ -238,13 +240,16 @@ def descargar_script():
     print(f"Correos: {correos}")
     print(f"Extensiones: {extensiones}")
     print(f"Numeros: {numeros}")
-    
-    # Obtener la ruta anterior desde donde se envía el formulario
-    ruta_anterior = request.referrer  # Esto obtiene la URL de la página anterior
 
-    # Usar urlparse para extraer solo la ruta
-    parsed_url = urlparse(ruta_anterior)
-    ruta_final = parsed_url.path  # Esto te dará solo la parte del path
+    # Obtener la URL anterior desde donde se envía el formulario
+    ruta_anterior = request.referrer
+
+    if ruta_anterior:
+        # Extraer únicamente la ruta
+        parsed_url = urlparse(ruta_anterior)
+        ruta_final = parsed_url.path
+    else:
+        ruta_final = '/'
 
     print(f'Ruta anterior: {ruta_final}')  # Ahora solo tendrás la parte de la ruta
 
@@ -803,20 +808,47 @@ def Genedador_contraseña():
 
 @app.route('/get_notes')
 def get_notes():
-    if "user_id" not in session:
-        return jsonify({"error": "No autorizado"}), 401
-    user_id = session["user_id"]
-    conn = get_db_connection()
-    cur = conn.cursor(dictionary=True)
-    cur.execute("""
-        SELECT id,title,content,color,position,cuerpo FROM notes WHERE user_id=%s ORDER BY position
-    """,
-    (user_id,))
-    notes = cur.fetchall()
-    cur.close()
-    conn.close()
+    user_id = session.get("user_id")
 
-    return jsonify({"notes":notes})
+    if not user_id:
+        app.logger.warning(
+            "GET /get_notes sin user_id. IP: %s",
+            request.remote_addr
+        )
+        return jsonify({
+            "error": "No autorizado",
+            "detalle": "La sesión no contiene user_id"
+        }), 401
+
+    conn = None
+    cur = None
+
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(dictionary=True)
+
+        cur.execute("""
+            SELECT id, title, content, color, position, cuerpo
+            FROM notes
+            WHERE user_id = %s
+            ORDER BY position
+        """, (user_id,))
+
+        notes = cur.fetchall()
+
+        return jsonify({"notes": notes}), 200
+
+    except Exception:
+        app.logger.exception("Error al consultar las notas")
+        return jsonify({
+            "error": "Error al consultar las notas"
+        }), 500
+
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
 
 @app.route('/add_note', methods=['POST'])
 def add_note():
@@ -1297,4 +1329,4 @@ def registrar_usuario():
     return render_template('confirmar_registro.html')
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=8000)
+    app.run(debug=True, host='0.0.0.0', port=5000)

@@ -59,7 +59,7 @@
     border-color: rgb(187, 187, 187);
     border-radius: 15px;
     box-shadow: 6px 6px 6px rgba(0, 0, 0, .57);
-    height: 85%;
+    height: auto;
     width: 60%;
 }
 
@@ -81,10 +81,12 @@ h5{
     text-align: left;
     line-height: 1.0;
     font-weight: 600;
+    font-size: 14px;
 }
 
 .saludo{
     font-size: calc(12px + (7 * ((100vh - 645px) / (1000 - 645))));
     text-align: left;
     line-height: 1.0;
+    font-size: 14px;
 }

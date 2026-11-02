@@ -11,10 +11,31 @@ function obtenerSaludo() {
 
 async function copiarTexto(texto) {
     try {
-        await navigator.clipboard.writeText(texto);
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(texto);
+        } else {
+            const textarea = document.createElement('textarea');
+
+            textarea.value = texto;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            textarea.style.top = '0';
+            textarea.setAttribute('readonly', '');
+
+            document.body.appendChild(textarea);
+            textarea.select();
+            textarea.setSelectionRange(0, textarea.value.length);
+
+            const copiado = document.execCommand('copy');
+            textarea.remove();
+
+            if (!copiado) {
+                throw new Error('El navegador no permitió copiar el texto.');
+            }
+        }
     } catch (error) {
-        console.error("Error al copiar el texto:", error);
-        alert("No se pudo copiar el texto al portapapeles.");
+        console.error('Error al copiar el texto:', error);
+        alert('No se pudo copiar el texto. Verifique los permisos del navegador.');
     }
 }
 

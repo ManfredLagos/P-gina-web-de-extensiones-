@@ -1138,6 +1138,7 @@ def login():
         if user:
             if user[2] == pin:
                 session['email'] = user[1]
+                session['user_id']= user[0]
                 return redirect('/Generador_Script')
             else:
                 session['email'] = email
